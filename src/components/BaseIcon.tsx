@@ -8,12 +8,6 @@ type propsType={
 }
 
 
-
-
-
-
-
-
 export const BaseIcon=(props:propsType)=>{
 
   return (
