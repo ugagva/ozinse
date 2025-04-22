@@ -4,12 +4,14 @@ import Stack from '@mui/material/Stack';
 import Selector from "../Selector.tsx";
 import {getIcons} from "../icons.tsx";
 
+import YearPicker from "./YearPicker.tsx";
+
 
 
 
 
 const top100Films = [
-    {title: 'The Shawshank Redemption', year: 1994},
+    {title: 'The Show Redemption', year: 1994},
     {title: 'The Godfather', year: 1972},
 
     {
@@ -39,7 +41,15 @@ const top100Films = [
 ];
 
 
+
 const BodyHeader = () => {
+
+
+
+
+
+
+
     return (
         <div className="">
             <div className="flex justify-between">
@@ -53,11 +63,7 @@ const BodyHeader = () => {
                 </BaseButton>
 
             </div>
-
-
-
             <div className="flex justify-between gap-2 mb-[10px]">
-
                 <Stack sx={{flexGrow: 1, marginLeft: 4,}} useFlexGap display="flex" alignItems="flex-start"
                        direction={{sm: 'row'}} spacing={{sm: 1}}>
                     <Selector options={top100Films.map((option) => option.title)} label="Сортировать:"
@@ -65,16 +71,47 @@ const BodyHeader = () => {
                     <Selector options={top100Films.map((option) => option.title)} label="Категория"
                               placeholder="Все категории" size="small"></Selector>
                     <Selector options={top100Films.map((option) => option.title)} label="Тип"
-                              placeholder="Фильмы и сериалы" size="small"></Selector>
+                              placeholder="Фильмы и сериалы" size="small">
+                    </Selector>
+
+
+                <YearPicker  ></YearPicker>
+
+                   {/*<label >Год*/}
+                   {/* <select*/}
+                   {/*         title="Год"*/}
+                   {/*         name="Год"*/}
+                   {/*         multiple={true}*/}
+                   {/*         value={selectedYear}*/}
+                   {/*         onChange={e => {*/}
+                   {/*             const options=[...e.target.selectedOptions];*/}
+                   {/*            setSelectedYear(options);*/}
+
+                   {/*         }*/}
+
+                   {/*         }*/}
+                   {/* >*/}
+                   {/*     {top100Films.map((item) =>(*/}
+                   {/*             <option*/}
+                   {/*                 key={item.title}*/}
+                   {/*                 value={item.year}*/}
+                   {/*             >*/}
+                   {/*                 {item.year}*/}
+                   {/*             </option>*/}
+                   {/*     ))}*/}
+
+
+                   {/* </select>*/}
+                   {/*</label>*/}
 
 
                 </Stack>
 
 
-                <img src="../../../public/images/math-plus.png" alt="plus"/>
             </div>
 
         </div>
     );
+
 }
 export default BodyHeader;

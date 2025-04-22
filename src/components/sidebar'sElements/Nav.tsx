@@ -12,33 +12,33 @@ const navItems = [
     {
         label: 'Проекты на главной',
         classes: activeNavItemClasses,
-        icon: <img src="../../../public/images/Dashboard.svg" className=" h-[20px] w-[20px]" alt="Dashboard"/>,
+        icon: <img src="../../../images/Dashboard.svg" className=" h-[20px] w-[20px]" alt="Dashboard"/>,
     },
     {
         label: 'Категории',
         classes: navItemClasses,
-        icon: <img src="../../../public/images/Combined%20Shape.png" className="h-[20px] w-[20px]" alt="Combined Shape"/>
+        icon: <img src="../../../images/Combined%20Shape.png" className="h-[20px] w-[20px]" alt="Combined Shape"/>
     },
     {
         label: 'Пользователи',
         classes: navItemClasses,
-        icon: <img src="../../../public/images/Combined%20Shape%20(1).png" className="h-[20px] w-[20px]" alt="Combined Shape 1(1)"/>
+        icon: <img src="../../../images/Combined%20Shape%20(1).png" className="h-[20px] w-[20px]" alt="Combined Shape 1(1)"/>
     },
 
     {
         label: 'Роли',
         classes: navItemClasses,
-        icon: <img src="../../../public/images/💚%20Icon%20-%20L.png" className="h-[20px] w-[20x]" alt="Shape 1(1)"/>
+        icon: <img src="../../../images/💚%20Icon%20-%20L.png" className="h-[20px] w-[20x]" alt="Shape 1(1)"/>
     },
     {
         label: 'Жанры',
         classes: navItemClasses,
-        icon: <img src="../../../public/images/💚%20Icon%20-%20L%20(1).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
+        icon: <img src="../../../images/💚%20Icon%20-%20L%20(1).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
     },
     {
         label: 'Возрасты',
         classes: navItemClasses,
-        icon: <img src="../../../public/images/💚%20Icon%20-%20L%20(2).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
+        icon: <img src="../../../images/💚%20Icon%20-%20L%20(2).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
     },
 ]
 
@@ -46,7 +46,7 @@ const Nav = () => {
     return (
         <nav>
             {navItems.map(({label, classes, icon}) => (
-                <a href="/public"
+                <a href="/images"
                className={classes}
                key={label}
                 >

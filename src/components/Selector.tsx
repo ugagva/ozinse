@@ -1,30 +1,33 @@
-import {Autocomplete, Chip, } from "@mui/material";
+import {Autocomplete, Chip} from "@mui/material";
 import TextField from "@mui/material/TextField";
 
-
-
 type optionsPropsType = {
-    options: string [],
     variants?: string,
     label?: string,
     placeholder?: string,
-    size?:'medium' | 'small'
+    size?: 'medium' | 'small',
+    options:ReadonlyArray<string>
 }
 
 const Selector = (props: optionsPropsType) => {
 
 
-
     return (
         <div>
-            <Autocomplete sx={{justifyContent: "center", alignItems: "center", minWidth: 238, maxHeight: 40,"& .MuiFilledInput-root": {
+            <Autocomplete sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                minWidth: 238,
+                maxHeight: 40,
+                "& .MuiFilledInput-root": {
 
                     fontFamily: "Arial",
                     fontWeight: "bold",
                     backgroundColor: "#f4f4f4",
                     borderRadius: "12px",
 
-                }}}
+                }
+            }}
                           multiple
                           id="tags-filled"
                           options={props.options}
@@ -34,7 +37,7 @@ const Selector = (props: optionsPropsType) => {
                                   const {key, ...itemProps} = getItemProps({index});
                                   return (
                                       <Chip variant="filled" label={option} key={key} {...itemProps}
-                                            />
+                                      />
                                   );
                               })
                           }
@@ -46,14 +49,16 @@ const Selector = (props: optionsPropsType) => {
                                   placeholder={props.placeholder}
                                   size={props.size}
                                   fullWidth
-                                  sx={{"& .MuiFilledInput-root": {
+                                  sx={{
+                                      "& .MuiFilledInput-root": {
 
                                           fontFamily: "Arial",
                                           fontWeight: "bold",
                                           backgroundColor: "#f4f4f4",
                                           borderRadius: "12px",
 
-                                      },}}
+                                      },
+                                  }}
 
                               />
                           )}
