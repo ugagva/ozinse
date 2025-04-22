@@ -6,8 +6,10 @@ const icons = {
     plus: 'math-plus.png',
 }
 
+
 const getIcons = () => {
     return icons;
 }
 export {getIcons};
+
 

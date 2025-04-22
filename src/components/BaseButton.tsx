@@ -12,7 +12,7 @@ const BaseButton = (props: baseButtonProps) => {
     return (
         <div>
             <button className={props.className}>
-                 <img src={getImageURL(props.nameIcon)} alt="" className="absolute pl-[10px]"/>
+                <img src={getImageURL(props.nameIcon)} alt="" className="absolute pl-[10px]"/>
                 {props.title}
 
             </button>

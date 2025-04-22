@@ -1,29 +1,64 @@
+import {Autocomplete, Chip, } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 
 
-// type PropsType={
-//   label: string,
-//
-// }
+type optionsPropsType = {
+    options: string [],
+    variants?: string,
+    label?: string,
+    placeholder?: string,
+    size?:'medium' | 'small'
+}
 
-import Autocomplete from "@mui/material/Autocomplete";
+const Selector = (props: optionsPropsType) => {
 
 
-const options = ['Option 1', 'Option 2'];
 
-
-const Selector = () => {
     return (
         <div>
-            <Autocomplete
-                id="custom-input-demo"
-                options={options}
-                renderInput={(params) => (
-                    <div ref={params.InputProps.ref}>
-                        <input style={{ width: 200 }} type="text" {...params.inputProps} />
-                    </div>
-                )}
+            <Autocomplete sx={{justifyContent: "center", alignItems: "center", minWidth: 238, maxHeight: 40,"& .MuiFilledInput-root": {
+
+                    fontFamily: "Arial",
+                    fontWeight: "bold",
+                    backgroundColor: "#f4f4f4",
+                    borderRadius: "12px",
+
+                }}}
+                          multiple
+                          id="tags-filled"
+                          options={props.options}
+
+                          renderValue={(value: readonly string[], getItemProps) =>
+                              value.map((option: string, index: number) => {
+                                  const {key, ...itemProps} = getItemProps({index});
+                                  return (
+                                      <Chip variant="filled" label={option} key={key} {...itemProps}
+                                            />
+                                  );
+                              })
+                          }
+                          renderInput={(params) => (
+                              <TextField
+                                  {...params}
+                                  variant="filled"
+                                  label={props.label}
+                                  placeholder={props.placeholder}
+                                  size={props.size}
+                                  fullWidth
+                                  sx={{"& .MuiFilledInput-root": {
+
+                                          fontFamily: "Arial",
+                                          fontWeight: "bold",
+                                          backgroundColor: "#f4f4f4",
+                                          borderRadius: "12px",
+
+                                      },}}
+
+                              />
+                          )}
             />
+
 
         </div>
     );

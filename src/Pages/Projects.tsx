@@ -1,6 +1,7 @@
-import Header from "../components/Header.tsx";
-import SideBar from "../components/SideBar.tsx";
+import SideBar from "../components/sidebar'sElements/SideBar.tsx";
+import Header from "../components/page'sElements/Header.tsx";
 import PageBody from "../components/PageBody.tsx";
+
 
 const Projects = () => {
 

@@ -1,6 +1,6 @@
 
 import Nav from "./Nav.tsx";
-import Logo from "./Logo.tsx";
+import Logo from "../Logo.tsx";
 
 
 const SideBar = () => {
@@ -11,7 +11,6 @@ const SideBar = () => {
                 className="w-[250px] h-[1024px] text-[#b2b2b2]  flex flex-col fixed lg:sticky  h-screen lg:h-auto -translate-x-full target:translate-x-0 lg:translate-x-0 transition-transform peer"
             >
                 <Logo/>
-
                 <Nav/>
             </aside>
         </div>

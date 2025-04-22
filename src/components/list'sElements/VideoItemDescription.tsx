@@ -1,5 +1,5 @@
-import {BaseIcon} from "./BaseIcon.tsx";
-import {getIcons} from "./icons.tsx";
+import {BaseIcon} from "../BaseIcon.tsx";
+import {getIcons} from "../icons.tsx";
 
 
 

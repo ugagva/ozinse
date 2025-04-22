@@ -9,7 +9,7 @@ const itemLists = [
     title: 'Айдар',
     description1: 'Телехикая',
     description2: 'Мультфильм',
-    coverUrl: 'src/assets/images/Group 1.png',
+    coverUrl: './public/images/Group 1.png',
     age: '4fgf бөлім'
 },
     {
@@ -17,7 +17,7 @@ const itemLists = [
         title: 'А--SDD',
         description1: 'Телехикая 8',
         description2: 'Мультфильм***',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '5 бөлім'
     },
     {
@@ -25,7 +25,7 @@ const itemLists = [
         title: 'J-==J',
         description1: 'Телех----икая',
         description2: 'Мль-----тфильм',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '3 өлім'
     },
     {
@@ -33,7 +33,7 @@ const itemLists = [
         title: '0++',
         description1: 'Телех----икая',
         description2: 'Мль-----тфильм',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '3 өлім'
     },
     {
@@ -41,7 +41,7 @@ const itemLists = [
         title: 'JJ--',
         description1: 'Телех----икая',
         description2: 'Мль-----тфильм',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '3 өлім'
     },
     {
@@ -49,7 +49,7 @@ const itemLists = [
         title: 'JJ+J',
         description1: 'Телех----икая',
         description2: 'Мль-----тфильм',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '3 өлім'
     },
     {
@@ -57,7 +57,7 @@ const itemLists = [
         title: 'JЧЫФЫJ',
         description1: 'Телех----икая',
         description2: 'Мль-----тфильм',
-        coverUrl: 'src/assets/images/Group 1.png',
+        coverUrl: './public/images/Group 1.png',
         age: '3 өлім'
     }
 ]
