@@ -17,7 +17,7 @@ type playListPropsType={
 
 const VideoItemList = (props:playListPropsType) => {
     return (
-        <a href="/" className={ ` relative p-4 pl-[24px] rounded-xl duration-200  |{props.classes}`}>
+        <a href="/public" className={ ` relative p-4 pl-[24px] rounded-xl duration-200  |{props.classes}`}>
 
 
         <div className=" hover:bg-[#0001] bg-white w-[240px] h-[460px] p-[12px] gap-[16px] rounded-lg">

@@ -1,5 +1,5 @@
 
-import Search from "./Search.tsx";
+import Search from "../Search.tsx";
 import Exit from "./Exit.tsx";
 
 
