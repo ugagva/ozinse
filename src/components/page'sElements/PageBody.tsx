@@ -1,5 +1,6 @@
-import VideoItemList from "./VideoItemList.tsx";
+
 import BodyHeader from "./BodyHeader.tsx";
+import VideoItemList from "../list'sElements/VideoItemList.tsx";
 
 
 const itemLists = [
