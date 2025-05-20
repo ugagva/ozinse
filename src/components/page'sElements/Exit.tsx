@@ -1,16 +1,19 @@
 
+import ExitSvgIcon from "../../Icons/ExitSvgIcon.tsx";
+
 
 const Exit = () => {
     return (
-        <div  >
-            <a href="/images" className="flex absolute right-0  items-center mx-6 px-4 gap-2  ">
-                <span className=" w-[43px] h-[24px] text-[14px] mt-[37px] font-[Roboto] font-semibold text-[#8F92A1]">Выйти</span>
+<div className="   ">
+            <a href="" className="flex items-center justify-center  w-[180px] h-[56px]  gap-2 " >
+                <span
+                    className=" font-medium-[Roboto]  font-semibold text-[#8F92A1]">Выйти</span>
+                <ExitSvgIcon></ExitSvgIcon>
 
-                <img src="/images/Frame 13594.png"
-                     className="w-[32px] h-[32px] mt-[34px] rounded-md   bc-[#DE350B0D] " alt="Exit"/>
+
             </a>
+    </div>
 
-        </div>
     )
 };
 

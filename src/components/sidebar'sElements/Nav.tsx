@@ -1,10 +1,16 @@
+import DashboardSvgIcon from "../../Icons/DashboardSvgIcon.tsx";
+import RoleSvgIcon from  "../../Icons/RoleSvgIcon.tsx";
+import GenreSvgIcon from  "../../Icons/GenreSvgIcon.tsx";
+import CategoriesSvgIcon from  "../../Icons/CategoriesSvgIcon.tsx";
+import PeopleSvgIcon from  "../../Icons/PeopleSvgIcon.tsx";
+import AgesSvgIcon from "../../Icons/AgesSvgIcon.tsx";
 
 
 
 
-const activeNavItemClasses = 'flex items-center text-[#7E2DFC] gap-4 mx-2 px-4 py-2 rounded' as const;
+const activeNavItemClasses = 'flex items-center text-[#7E2DFC] gap-4 px-[20px] px-1 py-2 rounded' as const;
 
-const navItemClasses = 'flex items-center color-[#8F92A1] hover:text-white mx-2 gap-4 px-4 py-2 rounded duration-500' as const;
+const navItemClasses = 'flex items-center color-[#8F92A1] hover:text-white  gap-4 px-[20px] py-2 rounded duration-500' as const;
 
 
 
@@ -12,39 +18,42 @@ const navItems = [
     {
         label: 'Проекты на главной',
         classes: activeNavItemClasses,
-        icon: <img src="../../../images/Dashboard.svg" className=" h-[20px] w-[20px]" alt="Dashboard"/>,
+        icon: <DashboardSvgIcon></DashboardSvgIcon>
     },
     {
         label: 'Категории',
         classes: navItemClasses,
-        icon: <img src="../../../images/Combined%20Shape.png" className="h-[20px] w-[20px]" alt="Combined Shape"/>
+        icon: <CategoriesSvgIcon></CategoriesSvgIcon>
     },
     {
         label: 'Пользователи',
         classes: navItemClasses,
-        icon: <img src="../../../images/Combined%20Shape%20(1).png" className="h-[20px] w-[20px]" alt="Combined Shape 1(1)"/>
+        icon:<PeopleSvgIcon></PeopleSvgIcon>
     },
 
     {
         label: 'Роли',
         classes: navItemClasses,
-        icon: <img src="../../../images/💚%20Icon%20-%20L.png" className="h-[20px] w-[20x]" alt="Shape 1(1)"/>
+        icon: <RoleSvgIcon></RoleSvgIcon>
     },
     {
         label: 'Жанры',
         classes: navItemClasses,
-        icon: <img src="../../../images/💚%20Icon%20-%20L%20(1).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
+        icon: <GenreSvgIcon></GenreSvgIcon>
     },
     {
         label: 'Возрасты',
         classes: navItemClasses,
-        icon: <img src="../../../images/💚%20Icon%20-%20L%20(2).png" className="h-[20px] w-[20px]" alt="Shape 1(1)"/>
+        icon:<AgesSvgIcon></AgesSvgIcon>
+
     },
 ]
 
+
+
 const Nav = () => {
     return (
-        <nav>
+        <nav className="mt-[34px] ">
             {navItems.map(({label, classes, icon}) => (
                 <a href="/images"
                className={classes}
@@ -52,7 +61,7 @@ const Nav = () => {
                 >
                     {icon}
 
-            <span className=" ml-4 text-base text-[#171717] font-[Inter] font-bold ">
+            <span className=" ml-4 text-base text-[#171717] font-[Roboto] font-bold ">
                     {label}
                 </span>
         </a>

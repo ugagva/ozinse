@@ -1,12 +1,11 @@
-import BaseButton from "../BaseButton.tsx";
+import BaseButton from "../elements/BaseButton.tsx";
 
 import Stack from '@mui/material/Stack';
-import Selector from "../Selector.tsx";
-import {getIcons} from "../icons.tsx";
-
-import YearPicker from "./YearPicker.tsx";
+import Selector from "../elements/Selector.tsx";
 
 
+import DataPicker from "./DataPicker.tsx";
+import PlusSvgIcon from "../../Icons/PlusSvgIcon.tsx";
 
 
 
@@ -41,71 +40,47 @@ const top100Films = [
 ];
 
 
-
-const BodyHeader = () => {
-
-
-
+type PropsType= {
+    value?: string | undefined
+}
 
 
 
+const BodyHeader = (props:PropsType) => {
 
     return (
-        <div className="">
-            <div className="flex justify-between">
 
-                <h1 className="text-2xl  tracking-tighter font-bold font-[Roboto]-bold pl-[48px] pt-[40px]">Проекты</h1>
+        <div className="h-[150px]">
+            <div className="flex  items-center justify-between ">
+                <h1 className="text-[22px]  tracking-tighter font-bold font-Roboto pl-[48px] mt-[40px]">{props.value}</h1>
                 <BaseButton
-                    className="bg-[#7E2DFC] w-[140px] h-[40px] opasity-2 rounded-[16px] mt-[40px] mr-[20px] text-center text-white font-bold text-sm tracking-tight "
-                    title={"Добавить"}
-                    nameIcon={getIcons().plus}
+                    className="flex justify-center items-center bg-[#7E2DFC] w-[120px] h-[40px] opasity-2 rounded-[16px] mt-[40px] mr-[48px]  gap-1 text-center text-white font-bold text-sm  "
+                    title="Добавить"
+                    icon={<PlusSvgIcon/>}
                 >
                 </BaseButton>
-
             </div>
-            <div className="flex justify-between gap-2 mb-[10px]">
-                <Stack sx={{flexGrow: 1, marginLeft: 4,}} useFlexGap display="flex" alignItems="flex-start"
-                       direction={{sm: 'row'}} spacing={{sm: 1}}>
-                    <Selector options={top100Films.map((option) => option.title)} label="Сортировать:"
-                              placeholder="Популярные" size="small"></Selector>
+
+            <div className="flex justify-between gap-1 mt-[40px]">
+                <Stack
+                    sx={{flexGrow: 1, marginLeft: 4, width: 238}} display="flex" alignItems="center"
+                    direction="row" spacing={{sm: 1}} gap="1">
+                    <Selector
+                        options={top100Films.map((option) => option.title)} label="Сортировать:"
+                        placeholder="Популярные" size="small"
+                        variants=""
+
+                    ></Selector>
+
                     <Selector options={top100Films.map((option) => option.title)} label="Категория"
                               placeholder="Все категории" size="small"></Selector>
                     <Selector options={top100Films.map((option) => option.title)} label="Тип"
                               placeholder="Фильмы и сериалы" size="small">
                     </Selector>
 
-
-                <YearPicker  ></YearPicker>
-
-                   {/*<label >Год*/}
-                   {/* <select*/}
-                   {/*         title="Год"*/}
-                   {/*         name="Год"*/}
-                   {/*         multiple={true}*/}
-                   {/*         value={selectedYear}*/}
-                   {/*         onChange={e => {*/}
-                   {/*             const options=[...e.target.selectedOptions];*/}
-                   {/*            setSelectedYear(options);*/}
-
-                   {/*         }*/}
-
-                   {/*         }*/}
-                   {/* >*/}
-                   {/*     {top100Films.map((item) =>(*/}
-                   {/*             <option*/}
-                   {/*                 key={item.title}*/}
-                   {/*                 value={item.year}*/}
-                   {/*             >*/}
-                   {/*                 {item.year}*/}
-                   {/*             </option>*/}
-                   {/*     ))}*/}
-
-
-                   {/* </select>*/}
-                   {/*</label>*/}
-
-
                 </Stack>
+
+                <DataPicker/>
 
 
             </div>

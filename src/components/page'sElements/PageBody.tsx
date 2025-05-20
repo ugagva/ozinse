@@ -1,82 +1,90 @@
 
-import BodyHeader from "./BodyHeader.tsx";
-import VideoItemList from "../list'sElements/VideoItemList.tsx";
+
+// import VideoItem from "../listsElements/VideoItem.tsx";
+import {JSXElementConstructor, ReactNode, } from "react";
+import BodyHeader from "./BodyHeader";
+// import {BASE_URL} from "../../utils/constants.tsx";
+// import axios from "axios";
 
 
-const itemLists = [
+//
+// const videoLists = [
+//
+//     {
+//         classes: 'none',
+//         title: 'Айдар',
+//         description1: 'Телехикая',
+//         description2: 'Мультфильм',
+//         coverUrl: '/images/Group 1.png',
+//         age: '4fgf бөлім'
+//     },
+//     {
+//         classes: 'hidden:sm block',
+//         title: 'А--SDD',
+//         description1: 'Телехикая 8',
+//         description2: 'Мультфильм***',
+//         coverUrl: '/images/Group 1.png',
+//         age: '5 бөлім'
+//     },
+//     {
+//         classes: ' hidden: lg:block',
+//         title: 'J-==J',
+//         description1: 'Телех----икая',
+//         description2: 'Мль-----тфильм',
+//         coverUrl: '/images/Group 1.png',
+//         age: '3 өлім'
+//     },
+//     {
+//         classes: ' hidden:xl:block',
+//         title: '0++',
+//         description1: 'Телех----икая',
+//         description2: 'Мль-----тфильм',
+//         coverUrl: '/images/Group 1.png',
+//         age: '3 өлім'
+//     },
+//     {
+//         classes: ' hidden:2xl:block',
+//         title: 'JJ--',
+//         description1: 'Телех----икая',
+//         description2: 'Мль-----тфильм',
+//         coverUrl: '/images/Group 1.png',
+//         age: '3 өлім'
+//     },
+//     {
+//         classes: 'hidden:3xl:block',
+//         title: 'JJ+J',
+//         description1: 'Телех----икая',
+//         description2: 'Мль-----тфильм',
+//         coverUrl: '/images/Group 1.png',
+//         age: '3 өлім'
+//     },
+//     {
+//         classes: 'hidden:4xl:block',
+//         title: 'JЧЫФЫJ',
+//         description1: 'Телеикая',
+//         description2: 'Новости',
+//         coverUrl: '/images/Group 1.png',
+//         age: '3 өлім'
+//     }
+// ]
 
-    {
-     classes:'none',
-    title: 'Айдар',
-    description1: 'Телехикая',
-    description2: 'Мультфильм',
-    coverUrl: '/images/Group 1.png',
-    age: '4fgf бөлім'
-},
-    {
-        classes:'hidden:sm block',
-        title: 'А--SDD',
-        description1: 'Телехикая 8',
-        description2: 'Мультфильм***',
-        coverUrl: '/images/Group 1.png',
-        age: '5 бөлім'
-    },
-    {
-        classes:' hidden: lg:block',
-        title: 'J-==J',
-        description1: 'Телех----икая',
-        description2: 'Мль-----тфильм',
-        coverUrl: '/images/Group 1.png',
-        age: '3 өлім'
-    },
-    {
-        classes:' hidden:xl:block',
-        title: '0++',
-        description1: 'Телех----икая',
-        description2: 'Мль-----тфильм',
-        coverUrl: '/images/Group 1.png',
-        age: '3 өлім'
-    },
-    {
-        classes:' hidden:2xl:block',
-        title: 'JJ--',
-        description1: 'Телех----икая',
-        description2: 'Мль-----тфильм',
-        coverUrl: '/images/Group 1.png',
-        age: '3 өлім'
-    },
-    {
-        classes:'hidden:3xl:block',
-        title: 'JJ+J',
-        description1: 'Телех----икая',
-        description2: 'Мль-----тфильм',
-        coverUrl: '/images/Group 1.png',
-        age: '3 өлім'
-    },
-    {
-        classes:'hidden:4xl:block',
-        title: 'JЧЫФЫJ',
-        description1: 'Телех----икая',
-        description2: 'Мль-----тфильм',
-        coverUrl: '/images/Group 1.png',
-        age: '3 өлім'
-    }
-]
 
-const PageBody = () => {
+
+type PropsType = {
+    value?: string,
+    content?:JSXElementConstructor<ReactNode> | undefined,
+}
+
+const PageBody = (props: PropsType) => {
     return (
-        <main className="relative w-[1200px] h-[2864px] bg-gray-50 opsity-1 rounded-xl mr-[250px] mt-[32px] ">
+        <main className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
             <div className="">
-                <BodyHeader/>
 
-                <div className="flex flex-wrap  mb-[14px]  ">
+                <BodyHeader value={props.value} />
 
-                {  itemLists.map((videoItemList) => (
-                    <VideoItemList
-                                   key={videoItemList.title}
-                                   {...videoItemList}
-                                   classes={videoItemList.classes}/>
-                ))}
+                <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
+
+
 
                 </div>
             </div>

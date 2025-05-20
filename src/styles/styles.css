@@ -1,3 +1,50 @@
 @import "tailwindcss";
 
 
+
+.containerDatePicker {
+
+    position: absolute;
+    display: inline-block;
+}
+
+.react-datepicker-wrapper {
+
+    background: #8F92A11A;
+
+    border: none;
+    border-radius: 16px;
+    margin-right: 50px;
+
+}
+
+.react-datepicker__input-container {
+    display: flex;
+    position: relative;
+    width: 146px;
+    height: 40px;
+    margin: 10px;
+    gap: 10px;
+    align-items: center;
+    justify-content: stretch;
+}
+
+
+.react-datepicker__input-container input {
+
+    width: 100%;
+    font-size: 16px;
+    font-family: "Roboto", serif;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.2px;
+    text-align: center;
+
+    color: #171717;
+    border: 0 !important;
+    /*border-radius: 1px;*/
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    appearance: none;
+
+}
+
