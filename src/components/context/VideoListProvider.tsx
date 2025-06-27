@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState} from 'react';
 import api from "../../featechers/api/api.tsx";
-import {VideoItemType} from "../../Pages/ProjectsPage.tsx";
+import {ProjectCardItemType} from "../../Pages/ProjectsPage.tsx";
 
 
 
@@ -10,7 +10,7 @@ type Props = {
 
 
 interface VideoListContextType {
-    videoItems: VideoItemType[];
+    videoItems: ProjectCardItemType[];
 
     loading: boolean;
     deleteVideoItem: (id: number) => void,
@@ -32,7 +32,7 @@ const VideoListContext =createContext<VideoListContextType>({
 
 export  const VideoListProvider = ({children}:Props) => {
 
-    const [videoItems, setVideoItems] = useState<VideoItemType[]>([])
+    const [videoItems, setVideoItems] = useState<ProjectCardItemType[]>([])
 
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -42,22 +42,16 @@ export  const VideoListProvider = ({children}:Props) => {
     const fetchVideoItems = async () => {
             try {
                 const response = await api.get(`v1/projects`);
-                setVideoItems(response.data as VideoItemType[]);
-
+                setVideoItems(response.data as ProjectCardItemType[]);
                 console.log(response.data)
             } catch (error) {
-                console.log("Ошибка загрузки видео:", error)
+                console.log("Ошибка загрузки проетов:", error)
             } finally
             {setLoading(false)}
         };
 
 
                                               // Загрузка одного проекта
-
-
-
-
-
     // ** Добваляем новый  проект
     const addVideoItem = async (newItem:FormData) => {
         try {

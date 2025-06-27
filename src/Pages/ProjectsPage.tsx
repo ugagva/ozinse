@@ -2,21 +2,28 @@ import SideBar from "../components/sidebar'sElements/SideBar.tsx";
 import Header from "../components/page'sElements/Header.tsx";
 
 
-import {useContext, } from "react";
+import React, { useContext,} from "react";
 
 
-import VideoItem from "../components/listsElements/VideoItem.tsx";
+
 import BodyHeader from "../components/page'sElements/BodyHeader.tsx";
 import VideoListContext from "../components/context/VideoListProvider.tsx";
 import {useModalManager} from "../components/Modals/useModalMeneger.tsx";
 import ModalFactory from "../components/Modals/ModalFactory.tsx";
+import {useNavigate} from "react-router-dom";
+import ProjectCardItem from "../components/listsElements/ProjectCardItem.tsx";
 
 
 
 const ProjectsPage = () => {
-
+ const navigate = useNavigate();
     const {videoItems, loading, deleteVideoItem,} = useContext(VideoListContext)
     const { modalType,  openModal, closeModal, modalProps  } = useModalManager();
+
+    const handleAddProject = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        navigate("/projects/add");
+    };
 
     if (loading) return <p>Загрузка страницы со списком проектов...</p>;
 
@@ -27,7 +34,7 @@ const ProjectsPage = () => {
                 <Header/>
 
                 <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
-                    <BodyHeader value={'Проекты'}/>
+                    <BodyHeader value={'Проекты'} onClick={handleAddProject}/>
 
                     <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
 
@@ -35,13 +42,13 @@ const ProjectsPage = () => {
                                 <p className="text-center w-full">Нет доступных проектов.</p>
                             ) :
                             (Array.isArray(videoItems) && videoItems.map((videoItem) => (
-                                <VideoItem key={videoItem.id}
+                                <ProjectCardItem key={videoItem.id}
                                     {...videoItem}
                                            onDelete={() => {
                                                openModal("delete", {
                                                    label: `проект “${videoItem.title}”`,
                                                    onConfirm: () => {
-                                                       deleteVideoItem(videoItem.id);   // здесь удаляем именно выбранный проект
+                                                       deleteVideoItem(videoItem.id);   // здесь удаляем выбранный проект
                                                        closeModal();
                                                    },
                                                    closeModal,
@@ -96,7 +103,7 @@ type VideoType = {
     Title: string;
 };
 
-export type VideoItemType = {
+export type ProjectCardItemType = {
     id: number,
     created_at: string,
     updated_at: string,

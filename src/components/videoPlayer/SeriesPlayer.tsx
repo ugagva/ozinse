@@ -1,4 +1,5 @@
-import {useRef, useState} from "react";
+import  { useState} from "react";
+import VideoPlayer from "./VideoPlayer.tsx";
 
 
 interface Episode {
@@ -9,7 +10,7 @@ interface Episode {
     thumbnail: string;
 }
 
-interface Project {
+interface VideoProject {
     type: string | null;
     series: {
         seasonCount: number;
@@ -18,71 +19,40 @@ interface Project {
 }
 
 interface SeriesPlayerProps {
-    project: Project,
+    videos: VideoProject,
 
 }
 
-const VideoPlayer = ({videoUrl, poster}: { videoUrl: string; poster?: string }) => {
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const videoRef = useRef<HTMLVideoElement>(null);
 
-    const handlePlay = () => {
-        if (!videoRef.current) return;
-
-        if (isPlaying) {
-            videoRef.current.pause();
-        } else {
-            videoRef.current.play();
-        }
-
-        setIsPlaying(!isPlaying);
-    };
-
-    return (
-        <div className="relative w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-lg">
-            <video
-                ref={videoRef}
-                src={videoUrl}
-                poster={poster}
-                className="w-full h-auto"
-            />
-            <button
-                onClick={handlePlay}
-                className="absolute bottom-4 left-4 bg-black/70 text-white px-4 py-2 rounded-full"
-            >
-                {isPlaying ? "⏸ Pause" : "▶ Play"}
-            </button>
-        </div>
-    );
-};
-
-const SeriesPlayer = ({project, }: SeriesPlayerProps) => {
+const SeriesPlayer = ({videos }: SeriesPlayerProps) => {
     const [selectedSeason, setSelectedSeason] = useState(1);
     const [selectedEpisode, setSelectedEpisode] = useState(1);
 
-    const episodes = project.series.series.filter((ep) => ep.seasonId === selectedSeason);
+    const episodes = videos.series.series.filter((ep) => ep.seasonId === selectedSeason);
     const currentEpisode = episodes.find((ep) => ep.series === selectedEpisode);
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Сериал: {project.type}</h2>
+            <h2 className="text-xl font-bold mb-4">Сериал: {videos.type}</h2>
 
             {currentEpisode ? (
+
                 <VideoPlayer videoUrl={currentEpisode.url} poster={currentEpisode.thumbnail}/>
             ) : (
                 <p className="text-center my-6">Серия не найдена</p>
             )}
 
-            <div className="flex gap-2 mt-6 mb-2 justify-center flex-wrap">
-                {Array.from({length: project.series.seasonCount}).map((_, index) => (
+            <div className="flex gap-2 mt-6 mb-2  flex-wrap ">
+
+                {Array.from({length: videos.series.seasonCount}).map((_, index) => (
                     <button
                         key={index}
                         onClick={() => {
                             setSelectedSeason(index + 1);
                             setSelectedEpisode(1);
                         }}
-                        className={`px-3 py-1 border rounded-xl ${
-                            selectedSeason === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+                        className={`px-3 py-1 w-[97px] h-[32px] rounded-l font-bold ${
+                            selectedSeason === index + 1 ? "bg-gray-100 text-black " : "bg-[#0052CC1A] text-[#0052CC]"
                         }`}
                     >
                         {index + 1} сезон
@@ -90,13 +60,13 @@ const SeriesPlayer = ({project, }: SeriesPlayerProps) => {
                 ))}
             </div>
 
-            <div className="flex gap-2 justify-center flex-wrap">
+            <div className="flex gap-2  flex-wrap font-bold">
                 {episodes.map((ep) => (
                     <button
                         key={ep.series}
                         onClick={() => setSelectedEpisode(ep.series)}
-                        className={`px-3 py-1 border rounded-xl ${
-                            selectedEpisode === ep.series ? "bg-blue-600 text-white" : "bg-gray-300"
+                        className={`px-3 py-1  ${
+                            selectedEpisode === ep.series ? "bg-white text-blue-600 border-b  " : "bg-white text-gray-500 "
                         }`}
                     >
                         {ep.series} серия

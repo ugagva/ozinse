@@ -2,21 +2,24 @@ import EditSvgIcon from "../../Icons/EditSvgIcon.tsx";
 import TrashSvgIcon from "../../Icons/TrashSvgIcon.tsx";
 import EyeSvgIcon from "../../Icons/EyeSvgIcon.tsx";
 
-import {VideoItemType} from "../../Pages/ProjectsPage.tsx";
+
 import { FC,MouseEvent} from "react";
 
+
+import {ProjectCardItemType} from "../../Pages/ProjectsPage.tsx";
 import {useNavigate} from "react-router-dom";
 
 
-type Props = VideoItemType & {
+type Props = ProjectCardItemType & {
     onDelete: () => void;
 };
 
 
-const VideoItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete,}) => {
+const ProjectCardItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete,}) => {
 
     const navigate=useNavigate()
     const genre = genres.map((genre) => genre.Title);
+    const ages = age_categories.map((ages) => ages.Title);
 
     const handleItemClick = (e: MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -24,7 +27,7 @@ const VideoItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete
     };
 
     const handleEdit = (e:MouseEvent<HTMLElement>) => {
-        // e.preventDefault();
+        e.preventDefault();
         e.stopPropagation();
         navigate(`/projects/edit/${id}`);
     };
@@ -35,7 +38,7 @@ const VideoItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete
             {/*Возрастные категории*/}
             <div className="absolute top-6 left-4 flex flex-wrap gap-1 z-10"  >
                 <span className="bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded-md"  >
-            {age_categories[1].Title}
+            {ages.join(',')}
           </span>
             </div>
             {/*Обложка */}
@@ -62,8 +65,6 @@ const VideoItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete
                     <span className="text-gray-700 text-xs px-1 py-1 ">
                     {/*{type.Title}*/}
                     </span>
-
-
             </div>
 
 
@@ -88,4 +89,4 @@ const VideoItem:FC<Props> = ({id,age_categories, images, genres, title, onDelete
 
 };
 
-export default VideoItem;
+export default ProjectCardItem;

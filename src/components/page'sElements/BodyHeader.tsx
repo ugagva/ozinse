@@ -6,7 +6,7 @@ import Selector from "../elements/Selector.tsx";
 
 import DataPicker from "./DataPicker.tsx";
 import PlusSvgIcon from "../../Icons/PlusSvgIcon.tsx";
-
+import React from "react";
 
 
 const top100Films = [
@@ -40,13 +40,14 @@ const top100Films = [
 ];
 
 
-type PropsType= {
-    value?: string | undefined
+type PropsType = {
+    value?: string | undefined,
+    onClick?: (e: React.SyntheticEvent) => Promise<void>
 }
 
 
+const BodyHeader = (props: PropsType) => {
 
-const BodyHeader = (props:PropsType) => {
 
     return (
 
@@ -57,6 +58,7 @@ const BodyHeader = (props:PropsType) => {
                     className="flex justify-center items-center bg-[#7E2DFC] w-[120px] h-[40px] opasity-2 rounded-[16px] mt-[40px] mr-[48px]  gap-1 text-center text-white font-bold text-sm  "
                     title="Добавить"
                     icon={<PlusSvgIcon/>}
+                    onClick={props.onClick}
                 >
                 </BaseButton>
             </div>
