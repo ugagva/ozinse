@@ -38,6 +38,10 @@ interface UploadEpisodes {
     episode: number;
     videoLink: string;
 }
+interface Screenshot {
+    type: "file" | "url";
+    value: File | string;
+}
 
 interface NewProject {
     title: string;
@@ -54,7 +58,7 @@ interface NewProject {
     genres: number[];
     images: {
         imageSrc: string;
-        screenshots: File[];
+        screenshots: Screenshot[];
     };
     views: null,
     video: {
@@ -158,9 +162,12 @@ const AddedProjects = () => {
 
 
         // Скриншоты  проходит по массиву и присваивает в ключ "screenshots"
-        newProject.images.screenshots.forEach((file: File) => {
-            if (file instanceof File) {
-                formData.append("screenshots", file);
+        newProject.images.screenshots.forEach((screenshot) => {
+            if (screenshot.type==="file" && screenshot.value instanceof File) {
+                formData.append("screenshots", screenshot.value);
+            }
+            if (screenshot.type === "url" && typeof screenshot.value === "string") {
+                formData.append("screenshotUrls", screenshot.value);
             }
         });
 
@@ -223,18 +230,22 @@ const AddedProjects = () => {
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) throw new Error("Failed to upload cover");
+        if (!response.ok) throw new Error("Ошибка загрузки обложки проекта!");
     };
 
     // Объединение в одну функцию
     const handleAddNewProject = async () => {
+
         try {
             setLoading(true);
             const projectId = await createProject();
+            if (newProject.images.imageSrc) {
             await uploadCover(projectId, newProject.images.imageSrc, newProject.title);
-            alert("Проект успешно создан и обложка загружена!");
+            alert("Проект успешно создан и обложка загружена!");}
 
-        } catch (error) {
+
+        }
+        catch (error) {
             console.error("Ошибка при добавлении проекта:", error);
             alert("Произошла ошибка. Попробуйте снова.");
         } finally {
@@ -275,7 +286,7 @@ const AddedProjects = () => {
 
 
     if (loading) {
-        return <p>Загрузка созданного проекта...</p>;
+        return <p>Запись созданного проекта...</p>;
     }
 
     return (
@@ -318,10 +329,10 @@ const AddedProjects = () => {
                                                 (genres.length > 0 && ageCategories.length > 0 && (
                                                     <MainContentSection
                                                         handleChange={handleChange}
-                                                        newProject={newProject}
                                                         genres={genres}
                                                         ageCategories={ageCategories}
                                                         projectTypes={projectTypes}
+                                                        newProject={newProject}
                                                         setNewProject={setNewProject}
                                                         setIsFilledSection={setIsFilledSection}
                                                         isFilledSection={isFilledSection}
@@ -340,19 +351,42 @@ const AddedProjects = () => {
                                             {/*секиця с обложкой и  скриншотами*/}
                                             {activeSection! === sections[2] &&
                                                 <ScreenshotsSection
-                                                    setIsFilledSection={setIsFilledSection}
-                                                    isFilledSection={isFilledSection}
+                                                    screenshots={newProject.images.screenshots}
+                                                    setScreenshots={(ss)=>
+                                                        setNewProject({
+                                                            ...newProject,
+                                                        images:{...newProject.images,screenshots:ss},
+                                                    })
+                                                    }
+                                                        setCover={(cover)=>{
+                                                            setNewProject({
+                                                                ...newProject,
+                                                                images:{...newProject.images,imageSrc:cover},
+                                                            })
+                                                        }
+                                                }
                                                 />
+
+                                            }
+                                            {isFilledSection ?
+                                                (<button
+                                                    onClick={handleSubmit}
+                                                    type="button"
+                                                    className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white">
+                                                    Добавить
+                                                </button>) : (
+                                                    <>
+                                                    </>)
                                             }
 
-                                            <div className="flex justify-end  space-x-2 pt-4 ">
+                                            <div className="flex  justify-end  space-x-2 pt-4 m-2">
                                                 <button
                                                     type="button"
-                                                    className="w-[134px] h-[38px]  bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400"
+                                                    className="w-[134px] h-[38px]  bg-gray-200 px-4  rounded-2xl font-bold hover:bg-gray-400"
                                                 > Отмена
                                                 </button>
                                                 {activeSection! === sections[1] && (
-                                                    <div className="flex justify-end  space-x-2 pt-4 ">
+                                                    <div className="flex justify-end  space-x-2  ">
                                                         <button
                                                             onClick={handleReturn}
                                                             type="button"
@@ -379,19 +413,10 @@ const AddedProjects = () => {
                                                         > Назад
                                                         </button>
 
-                                                        {isFilledSection?
-                                                            (<button
-                                                            onClick={handleSubmit}
-                                                            type="button"
-                                                            className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white">
-                                                            Добавить
-                                                        </button>):(
-                                                            <></>
-                                                        )}
-
                                                     </div>
                                                 )
                                                 }
+
 
                                                 {activeSection === sections[0] &&
                                                     (<div className="flex justify-end  space-x-2  ">
@@ -406,6 +431,8 @@ const AddedProjects = () => {
                                                 }
 
 
+
+
                                             </div>
                                             {
                                                 modalType && modalProps && (
@@ -415,7 +442,6 @@ const AddedProjects = () => {
                                                     />
                                                 )
                                             }
-
 
                                             <div className="flex justify-end  space-x-2 pt-4 ">
                                                 {/*<button*/}

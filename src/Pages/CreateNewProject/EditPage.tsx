@@ -1,6 +1,6 @@
-import PageBody from "../../components/page\'sElements/PageBody.tsx";
-import Header from "../../components/page\'sElements/Header.tsx";
-import SideBar from "../../components/sidebar\'sElements/SideBar.tsx";
+import PageBody from "../../components/page'sElements/PageBody.tsx";
+import Header from "../../components/page'sElements/Header.tsx";
+import SideBar from "../../components/sidebar'sElements/SideBar.tsx";
 
 
 
@@ -14,7 +14,6 @@ const EditPage = () => {
                 <Header/>
                 <PageBody
                     value={"Редактировать"}
-
 
                 />
             </div>

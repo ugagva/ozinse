@@ -1,7 +1,7 @@
 import {Dispatch, SetStateAction, useCallback, useEffect, useState} from "react";
 import NumericInput from "../NumericInput.tsx";
 import SeasonSection from "./SeasonSection.tsx";
-// import {NewProject} from "../ProjectStructure.tsx";
+ import {NewProject} from "../ProjectStructure.tsx";
 
 
 interface UploadEpisodes {
@@ -10,34 +10,13 @@ interface UploadEpisodes {
     videoLink: string;
 }
 
-interface NewProject {
-    title: string;
-    categoryId: string;
-    typeId: string;
-    ageCategoryId: string;
-    releaseYear: number|null;
-    durationInMins: number|null;
-    keywords: string;
-    description: string;
-    director: string;
-    producer: string;
-    ageCategories: number[];
-    genres: number[];
-    images: {
-        imageSrc: string;
-        screenshots: File[];
-    };
-    views: null,
-    video: {
-        seasonCount: number,
-        episodes: UploadEpisodes[];
-    }
-}
+
 
 interface VideoContentSectionProps {
     setProject?: Dispatch<SetStateAction<NewProject>>,
     setIsFilledSection?: Dispatch<SetStateAction<boolean>>,
     project: NewProject,
+
 
 }
 
@@ -126,14 +105,14 @@ const VideoContentSection = ({
     const arraySeasonsCount = createArrayTo(selectedSeasons);
 
     return (
-        <div className="w-[760px] m-1">
+        <div className="w-[760px] m-3">
             <NumericInput
-                placeholder="Количество сезонов"
+                placeholder="Количество сезонов "
                 selectedValue={selectedSeasons}
                 setSelectedValue={handleChangeSeasons}
             />
 
-            <div className="w-full m-1">
+            <div className="w-full ">
                 {arraySeasonsCount.length > 0 &&
                     <div className="mt-4 w-full">
                         {arraySeasonsCount.map((seasonsNumber, index) => {
@@ -146,6 +125,7 @@ const VideoContentSection = ({
                                         episodes={selectedCountEpisodes.filter(episode => episode.seasonId === seasonsNumber)}
                                         isLastSeason={isLastSeason}
                                         onChangeEpisodes={(newEpisodes) => handleEpisodesChange(seasonsNumber, newEpisodes)}
+
                                     />
 
                                 )

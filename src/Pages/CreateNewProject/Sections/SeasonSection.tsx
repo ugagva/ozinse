@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import TrashSvgIcon from "../../../Icons/TrashSvgIcon.tsx";
 import {SeasonSectionProps} from "./VideoContentSection.tsx"
+import VideoPlayer from "../../../components/videoPlayer/VideoPlayer.tsx";
 
 
 
@@ -36,7 +37,7 @@ const SeasonSection = ({
         const updatedSeasonEpisodes = seasonEpisodes.filter((episode) => episode.episode !== id);
 
         if (updatedSeasonEpisodes.length === 0) {
-            alert('В сезоне должна быть хотя бы 1 серия');
+            alert('В одном сезоне должна быть хотя бы 1 серия');
             return;
         }
 
@@ -73,13 +74,13 @@ const SeasonSection = ({
     }, [tempEpisodes, episodes, onChangeEpisodes]);
 
     return (
-        <div className="  w-full ">
-            <h1 className="text-2xl font-bold"> {seasonNumber} сезон</h1>
+        <div className="  w-full mt-4 p-1 ">
+            <h1 className="text-2xl font-bold m-1"> {seasonNumber} сезон </h1>
             {seasonEpisodes.map((item) => (
-                <div className="w-full " key={item.episode}>
+                <div className="w-full m-1  " key={item.episode}>
                     <div className="flex w-full  ">
-                        <div className="w-full m-2  h-[50px] rounded-2xl  bg-gray-50  border border-gray-300  hover:border-blue-500 focus:outline-none focus:border-blue-600 ">
-                            <div className="w-full   p-2">
+                        <div className="w-full   h-[50px] rounded-2xl  bg-gray-50  border border-gray-300  hover:border-blue-500 focus:outline-none focus:border-blue-600 ">
+                            <div className="w-full m-1  p-2">
                                 <input
                                     type="text"
                                     value={item.videoLink}
@@ -88,24 +89,31 @@ const SeasonSection = ({
                                     className="focus:outline-none "
                                 />
                             </div>
-                            {item.videoLink && (
-                                <p className="w-full"> { item.episode}   серия </p>
-                            )}
+
+                                <p className="w-full pt-2"> { item.episode}   серия </p>
+
                         </div>
+
                         <button type="button"  onClick={() => handleRemoveEpisode(item.episode)}>
-                            <TrashSvgIcon className="w-[20px] h-[20px]"/>
+                            <TrashSvgIcon className="m-2 w-[20px] h-[20px]"/>
                         </button>
                     </div>
+
                     {item.videoLink && (
                         <div className="">
-                           {/*<VideoPlayer  poster={item.videoLink} videoId={item.videoLink} />*/}
+                           <VideoPlayer
+                               poster={item.videoLink}
+                               videoId={item.videoLink}
+                               videoUrl={item.videoLink}
+
+                            />
                         </div>
                     )}
                 </div>
             ))}
 
-            <div className="">
-            <button className=" p-2 mt-4 text-blue-700 hover:text-blue-200 font-bold"
+            <div className="mt-8">
+            <button className="p-1 text-blue-700 hover:text-blue-200 font-bold"
                     type="button"
                 onClick={handleAddEpisode} >
                 Добавить серию

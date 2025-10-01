@@ -39,7 +39,7 @@ const SeriesPlayer = ({videos }: SeriesPlayerProps) => {
 
                 <VideoPlayer videoUrl={currentEpisode.url} poster={currentEpisode.thumbnail}/>
             ) : (
-                <p className="text-center my-6">Серия не найдена</p>
+                <p className="text-center my-6">Серия не найдена!</p>
             )}
 
             <div className="flex gap-2 mt-6 mb-2  flex-wrap ">
@@ -69,7 +69,7 @@ const SeriesPlayer = ({videos }: SeriesPlayerProps) => {
                             selectedEpisode === ep.series ? "bg-white text-blue-600 border-b  " : "bg-white text-gray-500 "
                         }`}
                     >
-                        {ep.series} серия
+                        {ep.series}
                     </button>
                 ))}
             </div>

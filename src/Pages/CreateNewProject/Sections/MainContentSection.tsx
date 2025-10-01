@@ -18,7 +18,10 @@ interface AgeCategory {
 
 
 
+
+
 interface MainSectionProps {
+
     handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     newProject: NewProject;
     genres: Genre[];
@@ -28,6 +31,8 @@ interface MainSectionProps {
     setIsFilledSection?: (value: (((prevState: boolean) => boolean) | boolean)) => void;
     setNewProject: Dispatch<SetStateAction<NewProject>>
 }
+
+
 
 
 const MainSection:
@@ -85,7 +90,6 @@ const MainSection:
     useEffect(() => {
         checkIfFilled();
     }, [checkIfFilled]);
-
 
     return (
 
@@ -159,7 +163,7 @@ const MainSection:
                     console.log("Выбранные жанры:", selectedGenres);
                     setNewProject((prev) => ({
                         ...prev,
-                       genres: selectedGenres
+                        genres: selectedGenres
                     }))
                 }}
                 className={inputBaseStyle}

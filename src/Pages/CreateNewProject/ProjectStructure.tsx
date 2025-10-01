@@ -1,8 +1,13 @@
 
+
 export interface UploadEpisodes {
     seasonId: number;
     episode: number;
     videoLink: string;
+}
+export  interface Screenshot {
+    type: "file" | "url";
+    value: File | string;
 }
 
 export interface NewProject {
@@ -20,7 +25,7 @@ export interface NewProject {
     genres:number [];
     images: {
         imageSrc: string;
-        screenshots: File[];
+        screenshots:Screenshot[];
     };
     views: null;
     video: {
