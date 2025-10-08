@@ -91,8 +91,10 @@ const MainSection:
         checkIfFilled();
     }, [checkIfFilled]);
 
-    return (
 
+
+
+    return (
         <div className="space-y-4">
 
             {/* Название */}

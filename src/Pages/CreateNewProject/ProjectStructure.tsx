@@ -11,10 +11,17 @@ export  interface Screenshot {
 }
 
 export interface NewProject {
+
     title: string;
     categoryId: string;
     typeId: string;
     ageCategoryId: string;
+    cover?: {                // 👈 добавляем cover
+        id?: string | number;
+        createdAt?: string;
+        updatedAt?: string;
+        projectID?: number;
+    };
     releaseYear: number|null;
     durationInMins: number|null;
     keywords: string;

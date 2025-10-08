@@ -74,7 +74,7 @@ const AddedProjects = () => {
     const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
     const [projectTypes, setProjectTypes] = useState<ProjectType[]>([]);
     const [isFilledSection, setIsFilledSection] = useState(false);
-    const { modalType,  modalProps  } = useModalManager();
+    const { modalType,  openModal, closeModal, modalProps   } = useModalManager();
 
 
     const [newProject, setNewProject] = useState<NewProject>({
@@ -264,9 +264,23 @@ const AddedProjects = () => {
     };
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        openModal("added", {
+            label: `проект “${newProject.title}”`,
+            onConfirm: () => {
+                console.log("✅ Подтверждено");
+                closeModal();
+                navigate("projects/");
+            },
+            closeModal,
+
+        });
+
+
         e.preventDefault();
         await handleAddNewProject();
-        navigate("projects/");
+
+
+
     };
 
 
@@ -325,6 +339,7 @@ const AddedProjects = () => {
                                             {/* Переключатель  */}
                                             {<SwitcherSection sections={sections} onActive={setActiveSection}/>}
 
+
                                             {activeSection === "Информация о проекте" &&
                                                 (genres.length > 0 && ageCategories.length > 0 && (
                                                     <MainContentSection
@@ -337,10 +352,14 @@ const AddedProjects = () => {
                                                         setIsFilledSection={setIsFilledSection}
                                                         isFilledSection={isFilledSection}
                                                     />
-                                                ))}
+                                                ))
+                                            }
+
+
+
 
                                             {/*секиця с видео*/}
-                                            {activeSection! === sections[1] &&
+                                            {activeSection === sections[1] &&
                                                 <VideoContentSection
                                                     project={newProject}
                                                     setProject={setNewProject}
@@ -349,23 +368,32 @@ const AddedProjects = () => {
                                             }
 
                                             {/*секиця с обложкой и  скриншотами*/}
-                                            {activeSection! === sections[2] &&
+                                            {activeSection === sections[2] &&(
                                                 <ScreenshotsSection
+                                                    newProject={newProject}
                                                     screenshots={newProject.images.screenshots}
+                                                    setIsFilledSection={setIsFilledSection}
+
                                                     setScreenshots={(ss)=>
                                                         setNewProject({
                                                             ...newProject,
-                                                        images:{...newProject.images,screenshots:ss},
-                                                    })
+                                                            images:{...newProject.images,screenshots:ss},
+                                                        })
                                                     }
-                                                        setCover={(cover)=>{
-                                                            setNewProject({
-                                                                ...newProject,
-                                                                images:{...newProject.images,imageSrc:cover},
-                                                            })
-                                                        }
-                                                }
+                                                    cover={newProject.images.imageSrc}   // значение
+                                                    setCover={(cover)=>{
+                                                        setNewProject({
+                                                            ...newProject,
+                                                            images:{...newProject.images,imageSrc:cover},
+
+                                                        })
+                                                    }
+
+                                                    }
                                                 />
+
+                                            )
+
 
                                             }
                                             {isFilledSection ?
@@ -379,13 +407,15 @@ const AddedProjects = () => {
                                                     </>)
                                             }
 
+
                                             <div className="flex  justify-end  space-x-2 pt-4 m-2">
                                                 <button
                                                     type="button"
                                                     className="w-[134px] h-[38px]  bg-gray-200 px-4  rounded-2xl font-bold hover:bg-gray-400"
                                                 > Отмена
                                                 </button>
-                                                {activeSection! === sections[1] && (
+
+                                                {activeSection === sections[1] && (
                                                     <div className="flex justify-end  space-x-2  ">
                                                         <button
                                                             onClick={handleReturn}
@@ -404,7 +434,7 @@ const AddedProjects = () => {
                                                     </div>
                                                 )
                                                 }
-                                                {activeSection! === sections[2] && (
+                                                { activeSection ! === sections[2] &&(
                                                     <div>
                                                         <button
                                                             onClick={handleReturn}
@@ -416,8 +446,6 @@ const AddedProjects = () => {
                                                     </div>
                                                 )
                                                 }
-
-
                                                 {activeSection === sections[0] &&
                                                     (<div className="flex justify-end  space-x-2  ">
                                                         <button
@@ -426,12 +454,8 @@ const AddedProjects = () => {
                                                             className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white"
                                                         > Далее
                                                         </button>
-
                                                     </div>)
                                                 }
-
-
-
 
                                             </div>
                                             {
@@ -442,6 +466,7 @@ const AddedProjects = () => {
                                                     />
                                                 )
                                             }
+
 
                                             <div className="flex justify-end  space-x-2 pt-4 ">
                                                 {/*<button*/}

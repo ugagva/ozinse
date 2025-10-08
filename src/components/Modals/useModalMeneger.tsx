@@ -1,16 +1,28 @@
 import { useState} from "react";
 
 
+
 export interface DeleteModalProps {
     label: string;
     onConfirm: () => void;
     closeModal: () => void;
 }
+export interface AddedModalProps {
+    label: string;
+    onConfirm: () => void;
+    closeModal: () => void;
+}
+
 type ModalComponentPropsMap = {
     delete: DeleteModalProps;
+    added: AddedModalProps;
+
     // future: other modals...
 };
 type ModalType = keyof ModalComponentPropsMap;
+
+
+
 
 export function useModalManager() {
 
