@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 
 import arrow from "../../Icons/arrow-right.svg";
 import arrowLeft from "/assets/detailsProjects/ArrowLeft.svg"
-// import { NewProject } from "./ProjectStructure.tsx";
 
-import {useNavigate} from "react-router-dom";
+
+import {useNavigate, useParams} from "react-router-dom";
 
 import SideBar from "../../components/sidebar'sElements/SideBar.tsx";
 import Header from "../../components/page'sElements/Header.tsx";
@@ -15,8 +15,8 @@ import MainContentSection from "./Sections/MainContentSection.tsx";
 import SwitcherSection from "../../components/switcher/SwitcherSection.tsx";
 import VideoContentSection from "./Sections/VideoContentSection.tsx";
 import ScreenshotsSection from "./Sections/ScreenshotsSection.tsx";
-import ModalFactory from "../../components/Modals/ModalFactory.tsx";
-import {useModalManager} from "../../components/Modals/useModalMeneger.tsx";
+
+import {useModalManager} from "../../components/Modals/useModalManager.tsx";
 
 interface ProjectType {
     ID: number;
@@ -38,6 +38,7 @@ interface UploadEpisodes {
     episode: number;
     videoLink: string;
 }
+
 interface Screenshot {
     type: "file" | "url";
     value: File | string;
@@ -67,14 +68,25 @@ interface NewProject {
     }
 }
 
+
 const AddedProjects = () => {
     const navigate = useNavigate();
+    const { projectId } = useParams<{projectId?: string}>(); // если есть → режим редактирования
+    const isEditMode = Boolean(projectId);
+
+
     const [loading, setLoading] = useState(false);
     const [genres, setGenres] = useState<Genre[]>([]);
     const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
     const [projectTypes, setProjectTypes] = useState<ProjectType[]>([]);
-    const [isFilledSection, setIsFilledSection] = useState(false);
-    const { modalType,  openModal, closeModal, modalProps   } = useModalManager();
+    const [isFilledSection, setIsFilledSection] = useState<Record<string, boolean>>(
+        {
+            "Информация о проекте": false,
+            "Видео": false,
+            "Обложка и скриншоты": false,
+        }
+    );
+    const {openModal, closeModal, ModalComponent} = useModalManager();
 
 
     const [newProject, setNewProject] = useState<NewProject>({
@@ -94,12 +106,153 @@ const AddedProjects = () => {
             imageSrc: "",
             screenshots: [],
         },
+
         views: null,
         video: {
             seasonCount: 1,
             episodes: []
         }
     });
+
+    // ✅ Загрузка существующего проекта при редактировании
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!projectId) return; // создание нового проекта
+        fetch(`${BASE_URL}/v1/projects/${projectId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then(res => res.json())
+            .then(data => setNewProject({
+                title: data.title,
+                description: data.description,
+                typeId: data.type_id,
+                releaseYear: data.release_year,
+                durationInMins: data.duration_in_mins,
+                director: data.director,
+                producer: data.producer,
+                keywords: data.keywords,
+                ageCategories: data.age_category_ids,
+                genres: data.genre_ids,
+                images: { imageSrc: data.cover || "", screenshots: [] },
+                cover: data.cover ? { id: data.cover_id } : null,
+            }));
+
+    }, [projectId]);
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const {name, value} = e.target;
+        setNewProject((prev) => ({
+            ...prev,
+            [name]: ['typeId', 'releaseYear', 'durationInMints'].includes(name)
+                ? Number(value)
+                : value,
+        }));
+
+    };
+    const handleUpdateProject = async (id: number) => {
+        const token = localStorage.getItem("token")
+
+        if (!projectId || isNaN(Number(projectId))) {
+            alert("Неверный ID проекта для редактирования");
+            return;
+        }
+
+        const numericProjectId = Number(projectId);
+        const numericTypeId = Number(newProject.typeId);
+        const numericReleaseYear = Number(newProject.releaseYear);
+        const numericDuration = Number(newProject.durationInMins);
+
+        if (isNaN(numericTypeId)) {
+            alert("Выберите корректный тип проекта");
+            return;
+        }
+
+        if (isNaN(numericReleaseYear)) {
+            alert("Введите корректный год выпуска");
+            return;
+        }
+
+        if (isNaN(numericDuration)) {
+            alert("Введите корректную длительность проекта");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const payload = {
+                title: newProject.title,
+                description: newProject.description,
+                release_year: Number(newProject.releaseYear),
+                duration_in_mins: Number(newProject.durationInMins),
+                director: newProject.director,
+                producer: newProject.producer,
+                keywords: Array.isArray(newProject.keywords)
+                    ? newProject.keywords
+                    : (newProject.keywords || ""),
+                type_id:  numericTypeId,
+                age_category_ids: newProject.ageCategories,
+                genre_ids: newProject.genres,
+            };
+
+            // 2️⃣ Отправляем PATCH-запрос на сервер для обновления проекта
+            const response = await fetch(`${BASE_URL}v1/projects/${numericProjectId}`, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) throw new Error("Ошибка обновления проекта");
+
+            const updatedProject = await response.json();
+            console.log("Проект обновлён:", updatedProject);
+
+            // 3️⃣ Если есть новая обложка, загружаем её
+            if (newProject.images?.imageSrc) {
+                const blob = await (await fetch(newProject.images.imageSrc)).blob();
+                const file = new File([blob], `${newProject.title}_cover.png`, { type: "image/png" });
+
+                const coverResponse = await uploadCoverFile(numericProjectId, file);
+                const imageId = coverResponse?.id;
+
+                if (imageId) {
+                    await setCoverForProject(numericProjectId, imageId);
+
+                    setNewProject(prev => ({
+                        ...prev,
+                        cover: { id: imageId },
+                    }));
+
+                    console.log("Обложка обновлена, imageId:", imageId);
+                }
+            }
+            // Модалка
+            openModal("update", {
+                label: `Изменения в проекте “${newProject.title}” сохранены!`,
+                onConfirm: () => {
+                    closeModal();
+                    navigate(`/projects/${id}`);
+                },
+                closeModal,
+            });
+
+
+        } catch (error) {
+            console.error("Ошибка при обновлении:", error);
+            alert("❌ Не удалось обновить проект");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
     //  Получение типов, жанров,возрастных категорий
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -163,7 +316,7 @@ const AddedProjects = () => {
 
         // Скриншоты  проходит по массиву и присваивает в ключ "screenshots"
         newProject.images.screenshots.forEach((screenshot) => {
-            if (screenshot.type==="file" && screenshot.value instanceof File) {
+            if (screenshot.type === "file" && screenshot.value instanceof File) {
                 formData.append("screenshots", screenshot.value);
             }
             if (screenshot.type === "url" && typeof screenshot.value === "string") {
@@ -211,19 +364,32 @@ const AddedProjects = () => {
         if (!response.ok) throw new Error("Ошибка создания проекта");
 
         const result = await response.json();
+        console.log("Ответ от сервера:", result); // 👉 { id: 24 }
         return result.id; // сервер вернёт { id: number }
     }
 
     // *****  Загрузка обложки
-    const uploadCover = async (projectId: number, imageUrl: string, title: string) => {
-        const payload = {
-            cover: newProject.images.imageSrc
-        }
+    const uploadCoverFile = async (projectId: number, file: File) => {
         const formData = new FormData();
-        const blob = await fetch(imageUrl).then(res => res.blob());
-        const file = new File([blob], `${title}_coverImage.png`, {type: blob.type});
+        const token = localStorage.getItem("token");
+        formData.append("image", file);
 
-        formData.append("cover", file);
+        const response = await fetch(`${BASE_URL}v1/projects/${projectId}/cover`, {
+            method: "POST",
+            headers: {'Authorization': `Bearer ${token}`}, // ❌ НЕ ставим Content-Type
+            body: formData
+        });
+
+        if (!response.ok) throw new Error("Ошибка загрузки cover файла");
+        const data = await response.json();
+        return data.id; // это id изображения
+    };
+
+    const setCoverForProject = async (projectId: number, imageId: string) => {
+        const payload = {
+            image_id: imageId
+        }
+
         const response = await fetch(`${BASE_URL}v1/projects/${projectId}/cover`, {
             method: "PATCH",
             headers: {'Content-Type': 'application/json'},
@@ -231,57 +397,91 @@ const AddedProjects = () => {
         });
 
         if (!response.ok) throw new Error("Ошибка загрузки обложки проекта!");
+        const data = await response.json();
+        return data; //
     };
 
     // Объединение в одну функцию
     const handleAddNewProject = async () => {
-
         try {
             setLoading(true);
             const projectId = await createProject();
-            if (newProject.images.imageSrc) {
-            await uploadCover(projectId, newProject.images.imageSrc, newProject.title);
-            alert("Проект успешно создан и обложка загружена!");}
+            console.log("Создан проект с id:", projectId);
 
+            let imageId: string | undefined;
+            if (newProject.images?.imageSrc) {
 
-        }
-        catch (error) {
+                // Преобразуем base64 в Blob и создаём File
+                const blob = await (await fetch(newProject.images.imageSrc)).blob();
+
+                // создаём File с нужным MIME type
+                const file = new File([blob], `${newProject.title}_cover.png`, {type: "image/png"});
+                console.log("✅ Обложка успешно загружена");
+
+                // Загружаем файл файл на сервер через POST → получаем image_id
+
+                const coverResponse=await uploadCoverFile(projectId, file);
+                console.log("Файл обложки загружен, imageId:",coverResponse);
+                // ⚠️ Сохраняем imageId
+                imageId = coverResponse?.id;
+            }
+
+            // 3️⃣ Ставим cover через PATCH, если есть imageId
+            if (imageId) {
+                await setCoverForProject(projectId, imageId);
+
+                //    Сохраняем cover.id в state
+                setNewProject(prev => ({
+                    ...prev,
+                    cover: {id: imageId}, // ✅ проверка isCoverFilled сработает
+                }));
+
+                alert("Проект успешно создан и обложка загружена!");
+            }
+            return projectId; // ✅ возвращаем id, чтобы handleSubmit мог его использовать
+        } catch (error) {
+
             console.error("Ошибка при добавлении проекта:", error);
             alert("Произошла ошибка. Попробуйте снова.");
+            return null;
         } finally {
             setLoading(false);
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = e.target;
-        setNewProject((prev) => ({
-            ...prev,
-            [name]: ['typeId', 'releaseYear', 'durationInMins'].includes(name)
-                ? Number(value)
-                : value,
-        }));
-    };
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        openModal("added", {
-            label: `проект “${newProject.title}”`,
-            onConfirm: () => {
-                console.log("✅ Подтверждено");
-                closeModal();
-                navigate("projects/");
-            },
-            closeModal,
-
-        });
-
-
         e.preventDefault();
-        await handleAddNewProject();
+        // 1️⃣ Сначала создаём проект и получаем его id
+        const projectId = await handleAddNewProject();
 
+        // 2️⃣ Если проект успешно создан — переходим на страницу проекта
+        if (isEditMode && isNaN(Number(projectId))) {
 
+            await handleUpdateProject(projectId);
+        } else {
+            // Сначала модалка
+            openModal("added", {
+                label: ` “${newProject.title}” успешно добавлен!`,
+                onConfirm: () => {
+                    console.log("✅ Подтверждено");
+                    closeModal();
+                    navigate(`projects/${projectId}`);// навигация после подтверждения
+                },
+                closeModal,
+
+            });
+            setTimeout(() => {
+                closeModal();
+                navigate(`/projects/${projectId}`);
+            }, 2000);
+
+        }
 
     };
+
+
+
 
 
     const sections = ["Информация о проекте", "Видео", "Обложка и скриншоты"];
@@ -350,12 +550,10 @@ const AddedProjects = () => {
                                                         newProject={newProject}
                                                         setNewProject={setNewProject}
                                                         setIsFilledSection={setIsFilledSection}
-                                                        isFilledSection={isFilledSection}
+
                                                     />
                                                 ))
                                             }
-
-
 
 
                                             {/*секиця с видео*/}
@@ -368,23 +566,23 @@ const AddedProjects = () => {
                                             }
 
                                             {/*секиця с обложкой и  скриншотами*/}
-                                            {activeSection === sections[2] &&(
+                                            {activeSection === sections[2] && (
                                                 <ScreenshotsSection
                                                     newProject={newProject}
                                                     screenshots={newProject.images.screenshots}
                                                     setIsFilledSection={setIsFilledSection}
 
-                                                    setScreenshots={(ss)=>
+                                                    setScreenshots={(ss) =>
                                                         setNewProject({
                                                             ...newProject,
-                                                            images:{...newProject.images,screenshots:ss},
+                                                            images: {...newProject.images, screenshots: ss},
                                                         })
                                                     }
                                                     cover={newProject.images.imageSrc}   // значение
-                                                    setCover={(cover)=>{
+                                                    setCover={(cover) => {
                                                         setNewProject({
                                                             ...newProject,
-                                                            images:{...newProject.images,imageSrc:cover},
+                                                            images: {...newProject.images, imageSrc: cover},
 
                                                         })
                                                     }
@@ -395,16 +593,6 @@ const AddedProjects = () => {
                                             )
 
 
-                                            }
-                                            {isFilledSection ?
-                                                (<button
-                                                    onClick={handleSubmit}
-                                                    type="button"
-                                                    className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white">
-                                                    Добавить
-                                                </button>) : (
-                                                    <>
-                                                    </>)
                                             }
 
 
@@ -434,7 +622,7 @@ const AddedProjects = () => {
                                                     </div>
                                                 )
                                                 }
-                                                { activeSection ! === sections[2] &&(
+                                                {activeSection ! === sections[2] && (
                                                     <div>
                                                         <button
                                                             onClick={handleReturn}
@@ -445,7 +633,17 @@ const AddedProjects = () => {
 
                                                     </div>
                                                 )
+
                                                 }
+                                                {activeSection === sections[sections.length - 1] && isFilledSection["Обложка и скриншоты"] ?
+                                                    (<button
+                                                        onClick={handleSubmit}
+                                                        type="button"
+                                                        className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white">
+                                                        Добавить
+                                                    </button>) : null
+                                                }
+
                                                 {activeSection === sections[0] &&
                                                     (<div className="flex justify-end  space-x-2  ">
                                                         <button
@@ -458,14 +656,7 @@ const AddedProjects = () => {
                                                 }
 
                                             </div>
-                                            {
-                                                modalType && modalProps && (
-                                                    <ModalFactory
-                                                        type={modalType}
-                                                        modalProps={modalProps}
-                                                    />
-                                                )
-                                            }
+                                            { ModalComponent }
 
 
                                             <div className="flex justify-end  space-x-2 pt-4 ">

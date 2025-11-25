@@ -19,7 +19,7 @@ interface ScreenshotsSectionProps {
     setScreenshots: (screenshot: Screenshot[]) => void,
     setCover: (cover: string) => void,
     cover?: string,
-    setIsFilledSection?: Dispatch<SetStateAction<boolean>>,
+    setIsFilledSection?: Dispatch<SetStateAction<Record<string,boolean>>>,
 }
 
 
@@ -81,8 +81,8 @@ const ScreenshotsSection = ({
 
 
     const checkIfFilled = useCallback(() => {
-        // проверка cover
-        const isCoverFilled = !!newProject.cover?.id;
+        // проверка  обложки
+        const isCoverFilled = !!newProject.images.imageSrc;
         // проверка скриншотов
         const isScreenshotsFilled =
             Array.isArray(newProject.images.screenshots) &&
@@ -93,7 +93,10 @@ const ScreenshotsSection = ({
         console.log("cover заполнен?", isCoverFilled);
         console.log("screenshots заполнены?", isScreenshotsFilled);
         console.log("Все поля заполнены?", isAllFilled);
-        setIsFilledSection?.(isAllFilled);
+        setIsFilledSection?.(prev=>({
+            ...prev,
+            "Обложка и скриншоты": isAllFilled,
+        }));
     },[newProject,setIsFilledSection]);
 
 

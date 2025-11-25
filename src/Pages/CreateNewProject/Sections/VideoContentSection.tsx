@@ -14,7 +14,7 @@ interface UploadEpisodes {
 
 interface VideoContentSectionProps {
     setProject?: Dispatch<SetStateAction<NewProject>>,
-    setIsFilledSection?: Dispatch<SetStateAction<boolean>>,
+    setIsFilledSection?: Dispatch<SetStateAction<Record<string, boolean>>>,
     project: NewProject,
 
 
@@ -70,8 +70,12 @@ const VideoContentSection = ({
         const areAllEpisodesFilled = (project.video?.episodes || []).every((episode: {
             videoLink: string | number;
         }) => checkFilled(episode.videoLink));
+
         if (setIsFilledSection) {
-            setIsFilledSection(areAllEpisodesFilled);
+            setIsFilledSection(prev=>({
+                ...prev,
+                "Видео": areAllEpisodesFilled, // 👈
+            }));
         }
     }, [project.video, setIsFilledSection]);
 

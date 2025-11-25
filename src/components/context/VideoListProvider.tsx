@@ -16,6 +16,8 @@ interface VideoListContextType {
     deleteVideoItem: (id: number) => void,
     addVideoItem: (newItem:FormData) => Promise<void>,
     updateVideoItem: (id:number, updatedProject:FormData) =>Promise<void>,
+    mainProjects: number[];
+    setMainProjects: React.Dispatch<React.SetStateAction<number[]>>;
 
 }
 
@@ -26,7 +28,8 @@ const VideoListContext =createContext<VideoListContextType>({
     deleteVideoItem(): void {},
     addVideoItem: async ()=>  {},
     updateVideoItem: async ()=>  {},
-
+    mainProjects:[],
+    setMainProjects:()=>{}
 
 })
 
@@ -92,10 +95,25 @@ export  const VideoListProvider = ({children}:Props) => {
 
 
 
+    const [mainProjects, setMainProjects] = useState<number[]>([]);
+
+// при запуске — достаём из localStorage
+    useEffect(() => {
+        const stored = localStorage.getItem("mainProjects");
+        if (stored) setMainProjects(JSON.parse(stored));
+    }, []);
+
+// сохраняем при изменении
+    useEffect(() => {
+        localStorage.setItem("mainProjects", JSON.stringify(mainProjects));
+    }, [mainProjects]);
+
+
+
 
 
     return (
-        <VideoListContext.Provider value={{videoItems,loading, addVideoItem, deleteVideoItem, updateVideoItem, }}>
+        <VideoListContext.Provider value={{videoItems,loading, addVideoItem, deleteVideoItem, updateVideoItem, mainProjects , setMainProjects}}>
                 {children}
         </VideoListContext.Provider>
 

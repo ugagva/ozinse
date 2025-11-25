@@ -3,6 +3,8 @@
 // import VideoItem from "../listsElements/ProjectCardItem.tsx";
 import {JSXElementConstructor, ReactNode, } from "react";
 import BodyHeader from "./BodyHeader";
+import BodyHeaderTitle from "./BodyHeaderTitle.tsx";
+
 // import {BASE_URL} from "../../utils/constants.tsx";
 // import axios from "axios";
 
@@ -77,13 +79,18 @@ type PropsType = {
 
 const PageBody = (props: PropsType) => {
     return (
-        <main className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
+        <main className="relative w-[1190px] h-[2864px]  bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
             <div className="">
 
-                <BodyHeader value={props.value} />
+                {props.value === "Роли"                    ?
+                    <BodyHeaderTitle value={props.value} />
+                   : (
 
+                        <BodyHeader value={props.value}
+
+                        />
+                    )}
                 <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
-
 
 
                 </div>

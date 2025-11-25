@@ -5,7 +5,7 @@ type buttonProps = {
     className?: string,
     title?: string,
     icon?: JSX.Element,
-    onClick?: (e:SyntheticEvent) => Promise<void>,
+    onClick?: (e:SyntheticEvent) => void|Promise<void>,
     type?: "submit|reset|button|undefined"
 }
 
@@ -13,7 +13,8 @@ type buttonProps = {
 const BaseButton = (props: buttonProps) => {
     return (
 
-        <button className={props.className}  onClick={props.onClick}>
+        <button className={props.className}
+                onClick={props.onClick}>
             <div>{props.icon}</div>
             <div>{props.title}</div>
 

@@ -7,9 +7,9 @@ import SideBar from "../components/sidebar'sElements/SideBar.tsx";
 import Header from "../components/page'sElements/Header.tsx";
 import clapperIcon from "/assets/detailsProjects/clapperIcon.svg"
 import tv from "/assets/detailsProjects/info_categories.svg"
-import {useModalManager} from "../components/Modals/useModalMeneger.tsx";
+import {useModalManager} from "../components/Modals/useModalManager.tsx";
 import VideoListContext from "../components/context/VideoListProvider.tsx";
-import ModalFactory from "../components/Modals/ModalFactory.tsx";
+
 import TrashSvgIcon from "../Icons/TrashSvgIcon.tsx";
 import arrow from "../Icons/arrow-right.svg";
 import EyeSvgIcon from "../Icons/EyeSvgIcon.tsx";
@@ -105,7 +105,7 @@ const ProjectDetails = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [videoItemDetails, setVideoItemDetails] = useState<videoItemDetailsType | null>(null)
     const [images, setImages] = useState("")
-    const {modalType, openModal, closeModal, modalProps} = useModalManager();
+    const { openModal, closeModal, ModalComponent} = useModalManager();
     const {deleteVideoItem,} = useContext(VideoListContext);
     const [mockVideo, setMockVideo] = useState<ProjectType | null>(null);
     const [selectedSeason] = useState(1);
@@ -281,7 +281,7 @@ const ProjectDetails = () => {
                                                 className="flex  justify-center items-center bg-[#DE350B] w-[36px] h-[36px] rounded-2xl"
                                                 onClick={() =>
                                                     openModal("delete", {
-                                                        label: `проект “${videoItemDetails.title}”`,
+                                                        label: `“${videoItemDetails.title}”`,
                                                         onConfirm: () => {
                                                             deleteVideoItem(videoItemDetails.id);   // удаляем выбранный проект
                                                             closeModal();
@@ -405,9 +405,7 @@ const ProjectDetails = () => {
                 </div>
 
             </div>
-            {modalType && modalProps && (
-                <ModalFactory type={modalType} modalProps={modalProps}/>
-            )}
+            {ModalComponent}
         </div>
     );
 };

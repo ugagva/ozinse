@@ -27,7 +27,7 @@ const ModalDelete = ({label, onConfirm, closeModal}:DeleteModalProps) => {
                 <div className=" flex items-center justify-center  mt-[20px]">
 
                     <p className=" text-base  text-[#8F92A1]">
-                        Вы действительно хотите удалить проект ?</p>
+                        {`Вы действительно хотите удалить проект ${label} ?`}</p>
                 </div>
                     <div className="flex items-center justify-center mt-[42px] gap-3 ">
                         <button className="w-[134px] h-[38px]  bg-[#7E2DFC]   font-bold text-base text-white rounded-xl hover:bg-red-700"

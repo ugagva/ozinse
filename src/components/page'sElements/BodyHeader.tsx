@@ -6,7 +6,8 @@ import Selector from "../elements/Selector.tsx";
 
 import DataPicker from "./DataPicker.tsx";
 import PlusSvgIcon from "../../Icons/PlusSvgIcon.tsx";
-import React from "react";
+import  {JSXElementConstructor, ReactNode} from "react";
+import BodyHeaderTitle from "./BodyHeaderTitle.tsx";
 
 
 const top100Films = [
@@ -42,7 +43,8 @@ const top100Films = [
 
 type PropsType = {
     value?: string | undefined,
-    onClick?: (e: React.SyntheticEvent) => Promise<void>
+    content?: JSXElementConstructor<ReactNode> | undefined,
+    onClick?: (value: string) => void;
 }
 
 
@@ -52,43 +54,49 @@ const BodyHeader = (props: PropsType) => {
     return (
 
         <div className="h-[150px]">
-            <div className="flex  items-center justify-between ">
-                <h1 className="text-[22px]  tracking-tighter font-bold font-Roboto pl-[48px] mt-[40px]">{props.value}</h1>
-                <BaseButton
-                    className="flex justify-center items-center bg-[#7E2DFC] w-[120px] h-[40px] opasity-2 rounded-[16px] mt-[40px] mr-[48px]  gap-1 text-center text-white font-bold text-sm  "
-                    title="Добавить"
-                    icon={<PlusSvgIcon/>}
-                    onClick={props.onClick}
-                >
-                </BaseButton>
-            </div>
-
-            <div className="flex justify-between gap-1 mt-[40px]">
-                <Stack
-                    sx={{flexGrow: 1, marginLeft: 4, width: 238}} display="flex" alignItems="center"
-                    direction="row" spacing={{sm: 1}} gap="1">
-                    <Selector
-                        options={top100Films.map((option) => option.title)} label="Сортировать:"
-                        placeholder="Популярные" size="small"
-                        variants=""
-
-                    ></Selector>
-
-                    <Selector options={top100Films.map((option) => option.title)} label="Категория"
-                              placeholder="Все категории" size="small"></Selector>
-                    <Selector options={top100Films.map((option) => option.title)} label="Тип"
-                              placeholder="Фильмы и сериалы" size="small">
-                    </Selector>
-
-                </Stack>
-
-                <DataPicker/>
 
 
-            </div>
+                 <div className="flex  items-center justify-between ">
+
+                    <BodyHeaderTitle  value={props.value}/>
+                    <BaseButton
+                        className="flex justify-center items-center bg-[#7E2DFC] w-[120px] h-[40px] opasity-2 rounded-[16px] mt-[40px] mr-[48px]  gap-1 text-center text-white font-bold text-sm  "
+                        title="Добавить"
+                        icon={<PlusSvgIcon/>}
+                        onClick={() => props.onClick?.(props.value ?? '')}
+                    >
+                    </BaseButton>
+                </div>
+
+            { props.value!=='Роли' && props.value !== 'Проекты на главной' && (
+                <div className="flex justify-between gap-1 mt-[40px]">
+                    <Stack
+                        sx={{flexGrow: 1, marginLeft: 4, width: 238}} display="flex" alignItems="center"
+                        direction="row" spacing={{sm: 1}} gap="1">
+                        <Selector
+                            options={top100Films.map((option) => option.title)} label="Сортировать:"
+                            placeholder="Популярные" size="small"
+                            variants=""
+
+                        ></Selector>
+
+                        <Selector options={top100Films.map((option) => option.title)} label="Категория"
+                                  placeholder="Все категории" size="small"></Selector>
+                        <Selector options={top100Films.map((option) => option.title)} label="Тип"
+                                  placeholder="Фильмы и сериалы" size="small">
+                        </Selector>
+
+                    </Stack>
+
+                    <DataPicker/>
+
+
+
+                </div>
+                )}
 
         </div>
-    );
+                );
 
-}
+            }
 export default BodyHeader;

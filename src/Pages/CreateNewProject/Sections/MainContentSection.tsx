@@ -17,9 +17,6 @@ interface AgeCategory {
 }
 
 
-
-
-
 interface MainSectionProps {
 
     handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
@@ -27,8 +24,8 @@ interface MainSectionProps {
     genres: Genre[];
     ageCategories: AgeCategory[];
     projectTypes: ProjectType [];
-    isFilledSection: boolean;
-    setIsFilledSection?: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+    isFilledSection?: Dispatch<SetStateAction<Record<string, boolean>>>
+    setIsFilledSection?: ((value: (((prevState: Record<string, boolean>) => Record<string, boolean>) | Record<string, boolean>)) => void);
     setNewProject: Dispatch<SetStateAction<NewProject>>
 }
 
@@ -84,14 +81,15 @@ const MainSection:
 
         const isAllFilled = checkResults.every(Boolean);
         console.log("Все поля заполнены?", isAllFilled);
-        setIsFilledSection?.(isAllFilled);
+        setIsFilledSection?.(prev=>({
+            ...prev,
+            "Информация о проекте":isAllFilled,
+        }));
     }, [newProject, setIsFilledSection]);
 
     useEffect(() => {
         checkIfFilled();
     }, [checkIfFilled]);
-
-
 
 
     return (
