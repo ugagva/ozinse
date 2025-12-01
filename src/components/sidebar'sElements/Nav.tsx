@@ -29,7 +29,7 @@ const navItems:{ label: string; path: string; icon?: React.ReactNode; classes: s
     },
     {
         label: 'Категории',
-        path: "/categories",
+        path: "/types",
         classes: navItemClasses,
         icon: <CategoriesSvgIcon></CategoriesSvgIcon>
     },

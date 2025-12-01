@@ -97,17 +97,14 @@ const RolesPage = ({token}: { token: string }) => {
     useEffect(() => {
         if (roleToEdit) {
             setIsAdding(true); // используем ту же форму
-
         }
     }, [roleToEdit]);
 
 
     // Изменяем роль
     const handleEdit = async (role: RoleData) => {
-        // navigate(`/role/edit/${role.id}`);
 
-        // Установить роль, которую редактируем
-        setRoleToEdit(role);
+        setRoleToEdit(role);     // Установить роль, которую редактируем
         // Переключить в режим формы
         setIsAdding(false);
 

@@ -64,7 +64,6 @@ const RoleForm: FC<RoleFormProps> = ({
                 setForm(data);
             });
         }
-
     }, [initialData, roleId, setForm, routeRoleId]);
 
 
@@ -77,6 +76,7 @@ const RoleForm: FC<RoleFormProps> = ({
 
     const handleSubmit = async () => {
         let result: (RoleData & { id: number }) | undefined;
+        console.log("Creating role with:", form);
 
         if (form.id) {
 
@@ -104,7 +104,7 @@ const RoleForm: FC<RoleFormProps> = ({
         <div className=" fixed inset-0 z-50 flex items-center justify-center bg-[#898989] bg-opacity-50  ">
 
             <div
-                className="flex  flex-col bg-white rounded-xl p-1 w-[574px] h-[547px] ">
+                className="flex  flex-col bg-white rounded-xl p-1 w-[574px] h-[700px] ">
 
                 <div className="flex p-2   items-center justify-between">
 

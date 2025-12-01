@@ -18,6 +18,10 @@ import UsersPage from "../../Pages/Users/UsersPage.tsx";
 import RoleForm from "../../Pages/Roles/RoleForm.tsx";
 import ProjectsOnMain from "../../Pages/ProjectsOnMain/ProjectsOnMain.tsx";
 
+import GenresPage from "../../Pages/Geners/GenresPage.tsx";
+import AgeCategoriesPage from "../../Pages/Age_categories/AgeCategoriesPage.tsx";
+import TypesPage from "../../Pages/TypesPage.tsx";
+
 
 
 
@@ -38,7 +42,9 @@ const AppRoutes = () => {
                     <Route path="/roles" element={<PrivateRoute><RolesPage token={localStorage.getItem("token")||''}  /></PrivateRoute>}/>
                     <Route path="/role/add" element={<PrivateRoute><RoleForm/></PrivateRoute>}/>
                     <Route path="/role/edit/:roleId" element={<PrivateRoute><RoleForm token={localStorage.getItem("token")||''}/></PrivateRoute>}/>
-
+                    <Route path="/ages" element={<PrivateRoute><AgeCategoriesPage token={localStorage.getItem("token")||''}  /></PrivateRoute>}/>
+                    <Route path="/genres" element={<PrivateRoute><GenresPage /></PrivateRoute>}/>
+                    <Route path="/types" element={<PrivateRoute><TypesPage token={localStorage.getItem("token") || ''}/></PrivateRoute>}/>
                     <Route path="/users" element={<PrivateRoute><UsersPage/></PrivateRoute>}/>
 {/*<Route path="/ages" element={<PrivateRoute><AgesPage/></PrivateRoute>}/>*t/}
 {/*<Route path="/users" element={<PrivateRoute><UsersPage/></PrivateRoute>}/>*/}

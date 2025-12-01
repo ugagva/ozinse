@@ -68,7 +68,7 @@ const BodyHeader = (props: PropsType) => {
                     </BaseButton>
                 </div>
 
-            { props.value!=='Роли' && props.value !== 'Проекты на главной' && (
+            { props.value!=='Роли' && props.value !== 'Проекты на главной' && props.value !== 'Категории' && props.value !== 'Возрасты' && props.value !== 'Жанры' && props.value !== 'Пользователи' && (
                 <div className="flex justify-between gap-1 mt-[40px]">
                     <Stack
                         sx={{flexGrow: 1, marginLeft: 4, width: 238}} display="flex" alignItems="center"

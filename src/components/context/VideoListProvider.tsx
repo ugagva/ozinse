@@ -55,7 +55,7 @@ export  const VideoListProvider = ({children}:Props) => {
 
 
                                               // Загрузка одного проекта
-    // ** Добваляем новый  проект
+    // ** Добавляем новый  проект
     const addVideoItem = async (newItem:FormData) => {
         try {
             const response = await api.post("v1/projects", newItem, {

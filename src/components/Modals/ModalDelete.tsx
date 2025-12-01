@@ -17,7 +17,7 @@ const ModalDelete = ({label, onConfirm, closeModal}:DeleteModalProps) => {
 
                 <div className="flex items-center justify-between border-b border-[#8F92A1] border-dotted" >
 
-                <h2 className="text-lg  font-bold  mt-[10px] ml-[24px]"> Удалить проект {label}? </h2>
+                <h2 className="text-lg  font-bold  mt-[10px] ml-[24px]"> Удалить  {label}? </h2>
                 <button className="my-[22px] mr-[24px]" onClick={closeModal}>
                     <CrossSvgIcon/>
                 </button>
@@ -27,7 +27,7 @@ const ModalDelete = ({label, onConfirm, closeModal}:DeleteModalProps) => {
                 <div className=" flex items-center justify-center  mt-[20px]">
 
                     <p className=" text-base  text-[#8F92A1]">
-                        {`Вы действительно хотите удалить проект ${label} ?`}</p>
+                        {`Вы действительно хотите удалить  ${label} ?`}</p>
                 </div>
                     <div className="flex items-center justify-center mt-[42px] gap-3 ">
                         <button className="w-[134px] h-[38px]  bg-[#7E2DFC]   font-bold text-base text-white rounded-xl hover:bg-red-700"

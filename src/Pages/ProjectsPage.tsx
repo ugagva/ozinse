@@ -41,7 +41,9 @@ const ProjectsPage = () => {
 
                 <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
 
-                    <BodyHeader value={'Проекты'} onClick={handleAddProject}/>
+                    <BodyHeader
+                        value={'Проекты'}
+                        onClick={handleAddProject}/>
 
                     <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
 

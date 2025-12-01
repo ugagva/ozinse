@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {BASE_URL} from "../../utils/constants.js";
-import {BackendRoleData, RoleData} from "./RolesPage.tsx";
+import {BackendRoleData} from "./RolesPage.tsx";
 
 // type RoleData = {
 //     title: string;
@@ -129,8 +129,43 @@ export const useRoles = (token: string | undefined) => {
     const actionToNumber: Record<string, number> = {
         "Только чтение": 1,
         "Добавление": 2,
-        "Редактирование": 3
+        "Редактирование": 3,
+
+
     };
+    const roleToNumber: Record<string, number> = {
+        "Менеджер": 1,
+        "Редактор": 2,
+        "Модератор": 3,
+        "Пользователь": 4,
+    };
+
+
+
+    interface RoleData {
+        id:number;
+        title: string[];
+        projects: string[];       // действия над проектами
+        ageCategories: string[];
+        types: string[];
+        genres: string[];
+        users: string[];
+        roles: string[];
+    }
+
+// функция подготовки данных для отправки
+    function prepareRoleDataForSubmit(roleData: RoleData) {
+        return {
+            ...roleData,
+            title: roleData.title[0],
+            projects: roleData.projects.length? actionToNumber[roleData.projects[0]]:0,       // действия над проектами
+            ageCategories: roleData.ageCategories.map(a => actionToNumber[a]),
+            types: roleData.types.length?actionToNumber[roleData.types[0]]:0,
+            genres: roleData.genres.length?actionToNumber[roleData.genres[0]]:0,
+            users: roleData.users.length?actionToNumber[roleData.users[0]]:0,
+            roles: roleData.roles.length? roleToNumber[roleData.roles[0]]:0,
+        };
+    }
 
     const createRole = async (roleData: RoleData) => {
         setLoading(true);
@@ -143,16 +178,9 @@ export const useRoles = (token: string | undefined) => {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    ...roleData,
-                    title: roleData.title[0],
-                    projects: actionToNumber[roleData.projects[0]],
-                    ageCategories: actionToNumber[roleData.ageCategories[0]],
-                    genres: actionToNumber[roleData.genres[0]] ?? 0,
-                    types:actionToNumber[roleData.types[0] ?? 0],
-                    roles: actionToNumber[roleData.roles[0]],
-                    users: actionToNumber[roleData.users[0]],
-                }),
+                body: JSON.stringify(
+                    prepareRoleDataForSubmit(roleData),
+                ),
 
             });
 
@@ -180,7 +208,7 @@ export const useRoles = (token: string | undefined) => {
         roles: string[];
         id: number;
         title: string[];
-        types: number[];
+        types: string[];
         users: string[]
 
     }) => {
