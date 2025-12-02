@@ -1,0 +1,119 @@
+import {UserFormData} from "./UsersPage.tsx";
+import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
+import React, {useEffect, useState} from "react";
+// import BaseButton from "../../components/elements/BaseButton.tsx";
+import api from "../../featechers/api/api.tsx";
+
+
+interface UserFormProps {
+    initialData?: { Title: string },
+    id?: number,
+    onClose?: () => void,
+    closeForm?: null,
+    onSubmit?: (newUsers: UserFormData) => Promise<void>
+}
+
+const UserForm = ({ id, onClose, }: UserFormProps) => {
+
+    const [user, setUser] = useState<UserFormData>({Title:""});
+    const [loading, setLoading] = useState(false);
+
+
+
+
+    const loadUserData = async (id: number) => {
+        try {
+            setLoading(true);
+            const response = await api.get(`v1/users/${id}`);
+
+            setUser(response.data); // <-- заполняем форму
+        } catch (error) {
+            console.error("Ошибка при загрузке пользователя", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+            loadUserData(id).then()
+        }
+    }, [id]);
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        const {name, value} = e.target;
+        setUser(prev => ({
+            ...prev,
+            [name]: value
+
+        }));
+    }
+
+
+    if (loading)
+        return (
+            <div className="flex items-center justify-center text-blue-500 p-2">
+                Загружаем пользователя для редактирования...
+            </div>
+        );
+
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#898989] bg-opacity-50 ">
+
+            <div className="flex  flex-col  bg-white rounded-xl p-1 w-[574px] h-[433px]">
+                <div className="flex  items-center justify-between">
+                    <h2 className=" text-xl  font-bold  mt-[10px] ml-[24px] ">
+                        {"Данные пользователя"}
+
+                    </h2>
+
+                    <button
+                        className="my-[22px] mr-[24px]"
+                        onClick={onClose}
+                    >
+                        <CrossSvgIcon/>
+                    </button>
+
+                </div>
+
+                <div className=" text-[#8F92A1]-800  text-[14px] font-bold">
+                    {user && (
+                        <input
+                            type="text"
+                            placeholder="Имя пользователя "
+                            name="Title"
+                            value={user.Title}
+                            onChange={handleChange}
+                            className="flex  justify-center w-[510px] h-[46px] bg-[#8F92A10D]  m-6 p-5    border-gray-50 rounded-2xl shadow-l  "
+                        />
+                    )}
+                </div>
+
+                <div className="flex items-center justify-center m-2 p-4 gap-1">
+                    {/*<BaseButton*/}
+                    {/*    className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "*/}
+                    {/*    title="Добавить"*/}
+                    {/*    onClick={() => onSubmit?.(user)}*/}
+                    {/*>*/}
+                    {/*</BaseButton>*/}
+
+                    <button
+                        type="button"
+                        className="w-[134px] h-[40px]  rounded-xl bg-[#7E2DFC] text-white  font-bold rounded hover:bg-gray-200"
+                        onClick={onClose}> Закрыть
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    );
+};
+
+export default UserForm;

@@ -2,7 +2,7 @@ import Header from "../../components/page'sElements/Header.tsx";
 import BodyHeader from "../../components/page'sElements/BodyHeader.tsx";
 
 import SideBar from "../../components/sidebar'sElements/SideBar.tsx";
-import {useEffect, useState} from "react";
+import  {useEffect, useState} from "react";
 
 import Lists from "../Lists.tsx";
 import {useModalManager} from "../../components/Modals/useModalManager.tsx";
@@ -11,21 +11,25 @@ import api from "../../featechers/api/api.tsx";
 import GenreForm from "./GenreForm.tsx";
 
 
+
 export type GenresData = {
     ID: number;
     Title: string;
+    Image: '';
 }
 export type GenreFormData = {
     ID?: number;
     Title: string;
+
 };
 
 const GenresPage = () => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [genres, setGenres] = useState<GenresData[]>([])
     const {openModal, closeModal, ModalComponent} = useModalManager();
     const [genreToEdit, setGenreToEdit] = useState<GenreFormData | null>(null);
     const [isAdding, setIsAdding] = useState(false);
+    const [image, setImage] = useState<string|null>(null);
 
 
 
@@ -34,6 +38,7 @@ const GenresPage = () => {
         try {
             const response = await api.get(`v1/genres`);
             setGenres(response.data as GenresData[]);
+
             console.log(response.data)
         } catch (error) {
             console.log("Ошибка загрузки жанров:", error)
@@ -60,39 +65,44 @@ const GenresPage = () => {
     }
 
     //
-    const updateGenre = async (id: number, updatedGenre: GenreFormData) => {
-        try {
-            await api.patch(`v1/genres/${id}`, updatedGenre, {
-                headers: {"Content-Type": "application/json"}
-            });
-            await fetchGenres();
-        } catch (error) {
-            console.error("Ошибка обновления жанра:", error);
-        }
-    };
+    // const updateGenre = async (id: number, updatedGenre: GenreFormData) => {
+    //     try {
+    //         await api.patch(`v1/genres/${id}`, updatedGenre, {
+    //             headers: {"Content-Type": "application/json"}
+    //         });
+    //         await fetchGenres();
+    //     } catch (error) {
+    //         console.error("Ошибка обновления жанра:", error);
+    //     }
+    // };
 
 
-    const handleGenreSuccessAdd = (newGenre: GenresData & { id: number }) => {
-        setGenres((prev) => [...prev, newGenre]);
-        setIsAdding(false);
-    };
-
-    const handleGenreSuccessEdit = (updated: GenresData & { id: number }) => {
-        setGenres((prev) =>
-            prev.map((g) => (g.ID === updated.ID ? updated : g))
-        );
-        setGenreToEdit(null);
-    };
+    // const handleGenreSuccessAdd = (newGenre: GenresData & { id: number }) => {
+    //     setGenres((prev) => [...prev, newGenre]);
+    //     setIsAdding(false);
+    // };
+    //
+    // const handleGenreSuccessEdit = (updated: GenresData & { id: number }) => {
+    //     setGenres((prev) =>
+    //         prev.map((g) => (g.ID === updated.ID ? updated : g))
+    //     );
+    //     setGenreToEdit(null);
+    // };
 
 // Добавляем
     const handleAdd = () => {
         setIsAdding(true);
         setGenreToEdit(null);
+
     }
 // Редактируем
     const handleEdit = (genre: GenresData) => {
-        setGenreToEdit(genre);
+        setGenreToEdit({ID: genre.ID,
+            Title: genre.Title,
+           });// можно сюда подставить genre.Image, если есть});
+
         setIsAdding(false);
+
     };
 
 
@@ -105,9 +115,9 @@ const GenresPage = () => {
             console.error("Ошибка удаления проекта:", error);
         }
     };
-    const closeForm = () => setFormState(null);
 
 
+    if (loading) return <div>Загрузка списка жанров...</div>;
     return (
         <div>
             <div className="flex flex-grow">
@@ -127,24 +137,30 @@ const GenresPage = () => {
                                 key="new"
                                 initialData={ {Title:""}}
                                 onSubmit={createGenre}
-
                                 onClose={() => setIsAdding(false)}
-
-                                onSuccess={handleGenreSuccessAdd}
-                            />
+                                image={image}
+                                setImage={setImage}
+                               />
                         )}
                         {genreToEdit &&(
                             <GenreForm
-                                key={}
+                                key={genreToEdit.ID}
+                                id={genreToEdit.ID}
+                                initialData={{Title:genreToEdit.Title}}
+                                onSubmit={createGenre}
+                                onClose={() => setGenreToEdit(null)}
+                                image={image}
+                                setImage={setImage}
 
 
-                                />
+                            />
                         )}
 
                         <ul>
                             {genres.map((genre,) => (
                                 <Lists key={genre.ID}
                                        value={genre}
+                                       handleEdit={() => handleEdit(genre)}
                                        onDelete={() => {
                                            openModal("delete", {
                                                    label: `жанр "${genre.Title}"`,
@@ -157,7 +173,8 @@ const GenresPage = () => {
                                                }
                                            )
                                        }}
-                                       handleEdit={() => handleEdit(genre)}>
+
+                                     >
 
                                 </Lists>
 

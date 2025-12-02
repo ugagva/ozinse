@@ -38,7 +38,9 @@ interface UploadEpisodes {
     episode: number;
     videoLink: string;
 }
-
+interface Cover {
+    id: number;
+}
 interface Screenshot {
     type: "file" | "url";
     value: File | string;
@@ -65,7 +67,9 @@ interface NewProject {
     video: {
         seasonCount: number,
         episodes: UploadEpisodes[];
-    }
+    },
+
+
 }
 
 
@@ -111,7 +115,8 @@ const AddedProjects = () => {
         video: {
             seasonCount: 1,
             episodes: []
-        }
+        },
+
     });
 
     // ✅ Загрузка существующего проекта при редактировании
@@ -125,6 +130,7 @@ const AddedProjects = () => {
             .then(res => res.json())
             .then(data => setNewProject({
                 title: data.title,
+
                 description: data.description,
                 typeId: data.type_id,
                 releaseYear: data.release_year,
@@ -376,7 +382,7 @@ const AddedProjects = () => {
 
         const response = await fetch(`${BASE_URL}v1/projects/${projectId}/cover`, {
             method: "POST",
-            headers: {'Authorization': `Bearer ${token}`}, // ❌ НЕ ставим Content-Type
+            headers: {'Authorization': `Bearer ${token}`}, //
             body: formData
         });
 
@@ -528,7 +534,7 @@ const AddedProjects = () => {
                                     <div className="flex justify-between items-start mb-4">
 
                                         <form
-                                            className="w-auto p-3 m-2 rounded-2xl space-y-8">
+                                            className="w-full p-3 m-2 rounded-2xl space-y-8">
                                             <div className=" flex justify-start w-full gap-4 p-2  ">
                                                 <button onClick={() => navigate("/projects")}>
                                                     <img src={arrowLeft} alt="arrow"

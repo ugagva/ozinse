@@ -1,7 +1,7 @@
 import EditSvgIcon from "../Icons/EditSvgIcon.tsx";
 import TrashSvgIcon from "../Icons/TrashSvgIcon.tsx";
 import {FC,} from "react";
-import {GenresData} from "./Geners/GenresPage.tsx";
+
 
 type ListsProps = {
     value: {
@@ -9,10 +9,11 @@ type ListsProps = {
         ID: number,
     },
     onDelete: () => void,
-    handleEdit?: (id: number, updatedGenre: GenresData) => Promise<void>
+    handleEdit?: (genre: { Title: string; ID: number }) => void,
+
 }
 
-const Lists: FC<ListsProps> = ({value, onDelete, handleEdit,}) => {
+const Lists: FC<ListsProps> = ({value, onDelete, handleEdit, }) => {
     return (
         <div>
             <li
@@ -24,7 +25,7 @@ const Lists: FC<ListsProps> = ({value, onDelete, handleEdit,}) => {
 
                 <div className=" flex gap-1 absolute bottom-2 right-2">
                     <button
-                        onClick={() => handleEdit}
+                        onClick={() => handleEdit?.(value)}
                         className=" text-white px-2 py-1 rounded hover:bg-blue-600"
                     >
                         <EditSvgIcon/>

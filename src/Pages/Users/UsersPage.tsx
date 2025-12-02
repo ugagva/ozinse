@@ -1,11 +1,93 @@
 import SideBar from "../../components/sidebar'sElements/SideBar.tsx";
 import Header from "../../components/page'sElements/Header.tsx";
 import BodyHeader from "../../components/page'sElements/BodyHeader.tsx";
-import EditSvgIcon from "../../Icons/EditSvgIcon.tsx";
-import TrashSvgIcon from "../../Icons/TrashSvgIcon.tsx";
+
+import {useEffect, useState} from "react";
+import api from "../../featechers/api/api.tsx";
+import Lists from "../Lists.tsx";
+import {useModalManager} from "../../components/Modals/useModalManager.tsx";
+import {RoleData} from "../Roles/RolesPage.tsx";
+import {GenreFormData} from "../Geners/GenresPage.tsx";
+import GenreForm from "../Geners/GenreForm.tsx";
+import UserForm from "./UserForm.tsx";
+
+
+export type UsersData= {
+    ID: number;
+    Title: string;
+}
+
+export type UserFormData={
+    ID?: number;
+    Title: string;
+}
 
 
 const UsersPage = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [users, setUsers] = useState<UsersData[]>([]);
+    const [isAdding, setIsAdding] = useState(false);
+    const {openModal, closeModal, ModalComponent} = useModalManager();
+    const [userToEdit, setUserToEdit] = useState<UserFormData | null>(null);
+
+
+    const fetchUsers = async () => {
+        try {
+            const response = await api.get(`v1/users`);
+            setUsers(response.data as UsersData[]);
+
+            console.log(response.data)
+        } catch (error) {
+            console.log("Ошибка загрузки пользвателей:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchUsers().then()
+    }, []);
+
+
+
+
+// Добавляем
+const handleAdd = () => {
+    setIsAdding(true);
+    setUserToEdit(null)
+}
+
+const createUsers=async (newUsers:UserFormData) => {
+    try{
+        const response = await api.post("v1/users", newUsers, {
+            headers: {"Content-Type": "application/json"}
+        })
+        await fetchUsers();
+        return response.data;
+    } catch (error) {
+        console.error("Ошибка добавления жанра", error);
+    }
+    }
+
+
+
+const handleEdit = async (user:UsersData) => {
+    setUserToEdit({ID: user.ID, Title: user.Title});
+    setIsAdding(false);
+}
+
+const handleDelete = async (id: number) => {
+    try {
+        await api.delete(`v1/users/${id}`);
+    }catch(err){console.log("Ошибка удаления пользователя:",err)}
+}
+
+
+if (loading) return <div>Загрузка списка пользователей...</div>;
+
+
+
+
     return (
 
             <div className="flex flex-grow">
@@ -16,75 +98,48 @@ const UsersPage = () => {
 
                         <BodyHeader
                             value={'Пользователи'}
-                            // onClick={handleAdd}
-
+                            onClick={handleAdd}
                         />
+                        {isAdding &&(
+                            <UserForm
+                                key="new"
+                                initialData={ {Title:""}}
+                                onSubmit={createUsers}
+                                onClose={() => setIsAdding(false)}
 
+                            />
+                        )
+                        }
 
-                        {/*{isAdding && (*/}
-                        {/*    <div>*/}
-                        {/*        <CategoryForm*/}
-                        {/*            token={token}*/}
-                        {/*            key="new"*/}
-                        {/*            onSuccess={handleFormSuccessAdd}*/}
-                        {/*        />*/}
-                        {/*        <button*/}
-                        {/*            onClick={() => setIsAdding(false)}*/}
-                        {/*            className="mt-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">*/}
-                        {/*            Отмена*/}
-                        {/*        </button>*/}
+                        <ul>
+                            {users.map((user) => (
+                                <Lists key={user.ID}
+                                       value={user}
+                                       handleEdit={() => handleEdit(user)}
+                                       onDelete={() => {
+                                           openModal("delete", {
+                                                   label: `жанр "${user.Title}"`,
+                                                   onConfirm: async () => {
+                                                       await handleDelete(user.ID);
+                                                       setUsers(((prev) => prev.filter((u) => u.ID !== user.ID)))// здесь удаляем выбранный жанр
+                                                       closeModal()
+                                                   },
+                                                   closeModal,
+                                               }
+                                           )
+                                       }}
+                                />
+                            ))
 
-                        {/*    </div>*/}
-                        {/*)}*/}
+                            }
 
-                        {/*{categoriesToEdit && (*/}
-                        {/*    <RoleForm*/}
-                        {/*        key={`edit-${category.id}`}  // ключ зависит от id редактируемой роли*/}
-                        {/*        token={token}*/}
-                        {/*        initialData={categoriesToEdit}*/}
-                        {/*        onSuccess={handleFormSuccessEdit}*/}
-                        {/*    />*/}
-                        {/*)}*/}
-
-                    {/*    <ul>*/}
-                    {/*        {categories.map((category, i) => (*/}
-                    {/*            <li key={i}*/}
-                    {/*                className="relative w-[538px] h-[180px]  left-10 bg-white rounded-xl  transition-all p-2 mr-[48px] m-2">*/}
-                    {/*                <p className="text-xl font-bold ">*/}
-                    {/*                    {category.title}*/}
-                    {/*                </p>*/}
-
-
-                    {/*                <div className=" flex gap-1 absolute bottom-2 right-2">*/}
-                    {/*                    <button*/}
-                    {/*                        onClick={() => handleEdit(category,)}*/}
-                    {/*                        className=" text-white px-2 py-1 rounded hover:bg-blue-600"*/}
-                    {/*                    >*/}
-                    {/*                        <EditSvgIcon/>*/}
-                    {/*                    </button>*/}
-                    {/*                    <button*/}
-                    {/*                        onClick={() => handleDelete(category,)}*/}
-                    {/*                        className=" text-black px-2 py-1 rounded hover:bg-red-600"*/}
-                    {/*                    >*/}
-                    {/*                        <TrashSvgIcon/>*/}
-                    {/*                    </button>*/}
-                    {/*                </div>*/}
-                    {/*            </li>*/}
-                    {/*        ))*/}
-                    {/*        }*/}
-                    {/*    </ul>*/}
-
-
-                    {/*    /!*Рендер модалки*!/*/}
-
-                    {/*    {ModalComponent}*/}
-
-                    {/*</div>*/}
-
+                        </ul>
+                        {ModalComponent}
 
                 </div>
+                </div>
             </div>
-        </div>
+
     );
 };
 

@@ -47,4 +47,9 @@
     appearance: none;
 
 }
+.border-dash {
+    border: 2px dashed #8F92A133; /* толщина и цвет */
+    border-radius: 1rem;         /* скругление */
+}
+
 
