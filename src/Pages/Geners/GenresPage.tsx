@@ -159,7 +159,8 @@ const GenresPage = () => {
                         <ul>
                             {genres.map((genre,) => (
                                 <Lists key={genre.ID}
-                                       value={genre}
+                                       type="genre"
+                                       data={genre}
                                        handleEdit={() => handleEdit(genre)}
                                        onDelete={() => {
                                            openModal("delete", {

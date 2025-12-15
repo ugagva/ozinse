@@ -9,7 +9,8 @@ import {useModalManager} from "../../components/Modals/useModalManager.tsx";
 
 import api from "../../featechers/api/api.tsx";
 import Lists from "../Lists.tsx";
-import {UsersData} from "../Users/UsersPage.tsx";
+import AgeCategoryForm from "./AgeCategoryForm.tsx";
+
 
 
 export type AgeCategoriesData = {
@@ -23,7 +24,7 @@ const AgeCategoriesPage = () => {
 
     const [isAdding, setIsAdding] = useState(false);
     const [categoriesToEdit, setCategoriesToEdit] = useState<AgeCategoriesData | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     const [ageCategories, setAgeCategories] = useState<Array<AgeCategoriesData>>([]);
@@ -142,24 +143,24 @@ const  handleEdit =(category:AgeCategoriesData)=> {
                         />
 
 
-                        {/*{isAdding && (*/}
-                        {/*    <div>*/}
-                        {/*        <GenreForm*/}
-                        {/*            key="new"*/}
-                        {/*            initialData={ {Title:""}}*/}
-                        {/*            onSubmit={createAgeCategory}*/}
-                        {/*            onClose={() => setIsAdding(false)}*/}
-                        {/*            // image={image}*/}
-                        {/*            // setImage={setImage}*/}
-                        {/*        />*/}
-                        {/*        <button*/}
-                        {/*            onClick={() => setIsAdding(false)}*/}
-                        {/*            className="mt-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">*/}
-                        {/*            Отмена*/}
-                        {/*        </button>*/}
+                        {isAdding && (
+                            <div>
+                                <AgeCategoryForm
+                                    key="new"
+                                    initialData={ {Title:""}}
+                                    onSubmit={createAgeCategory}
+                                    onClose={() => setIsAdding(false)}
+                                    // image={image}
+                                    // setImage={setImage}
+                                />
+                                <button
+                                    onClick={() => setIsAdding(false)}
+                                    className="mt-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
+                                    Отмена
+                                </button>
 
-                        {/*    </div>*/}
-                        {/*)}*/}
+                            </div>
+                        )}
 
                         {/*{categoriesToEdit && (*/}
                         {/*    <GenreForm */}
@@ -178,7 +179,8 @@ const  handleEdit =(category:AgeCategoriesData)=> {
 
                                 <Lists
                                     key={ageCategory.ID}
-                                    value={ageCategory}
+                                    type=" ageCategory"
+                                    data={ageCategory}
                                     handleEdit={()=>handleEdit(ageCategory)}
                                     onDelete={()=>{
                                         openModal("delete", {

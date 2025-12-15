@@ -12,13 +12,19 @@ import UserForm from "./UserForm.tsx";
 
 export type UsersData= {
     ID: number;
-    Title: string;
+    Name: string;
+    Email: string;
+    CreatedAt:string;
+    UpdatedAt:string;
 }
 
-export type UserFormData={
+export type UserFormData = {
     ID?: number;
-    Title: string;
-}
+    Name: string;
+    Email?: string;
+    CreatedAt?: string;
+    UpdatedAt?: string;
+};
 
 
 const UsersPage = () => {
@@ -28,6 +34,7 @@ const UsersPage = () => {
     const [isAdding, setIsAdding] = useState(false);
     const {openModal, closeModal, ModalComponent} = useModalManager();
     const [userToEdit, setUserToEdit] = useState<UserFormData | null>(null);
+
 
 
     const fetchUsers = async () => {
@@ -70,8 +77,8 @@ const createUsers=async (newUsers:UserFormData) => {
 
 
 const handleEdit = async (user:UsersData) => {
-    setUserToEdit({ID: user.ID, Title: user.Title});
-    setIsAdding(false);
+        setUserToEdit({ID: user.ID, Name: user.Name, Email:user.Email, CreatedAt:user.CreatedAt, UpdatedAt:user.UpdatedAt});
+        setIsAdding(false);
 }
 
 const handleDelete = async (id: number) => {
@@ -81,11 +88,8 @@ const handleDelete = async (id: number) => {
 }
 
 
+
 if (loading) return <div>Загрузка списка пользователей...</div>;
-
-
-
-
     return (
 
             <div className="flex flex-grow">
@@ -101,22 +105,32 @@ if (loading) return <div>Загрузка списка пользователе�
                         {isAdding &&(
                             <UserForm
                                 key="new"
-                                initialData={ {Title:""}}
+                                initialData={ { Name: "", Email:"",}}
                                 onSubmit={createUsers}
                                 onClose={() => setIsAdding(false)}
-
                             />
                         )
                         }
+                        {userToEdit &&(
+                            <UserForm
+                                key={userToEdit.ID}
+                                id={userToEdit.ID}
+                                initialData={{Name:userToEdit.Name}}
+                                onSubmit={createUsers}
+                                onClose={()=>setUserToEdit(null)}
+                            />
+
+                        )}
 
                         <ul>
                             {users.map((user) => (
                                 <Lists key={user.ID}
-                                       value={user}
-                                       handleEdit={() => handleEdit(user)}
+                                       type="user"
+                                       data={user}
+                                       handleEdit={handleEdit}
                                        onDelete={() => {
                                            openModal("delete", {
-                                                   label: `жанр "${user.Title}"`,
+                                                   label: `жанр "${user.Name}"`,
                                                    onConfirm: async () => {
                                                        await handleDelete(user.ID);
                                                        setUsers(((prev) => prev.filter((u) => u.ID !== user.ID)))// здесь удаляем выбранный жанр

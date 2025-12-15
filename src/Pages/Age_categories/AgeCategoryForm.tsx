@@ -7,13 +7,13 @@ import {AgeCategoriesData} from "./AgeCategoriesPage.tsx";
 import api from "../../featechers/api/api.tsx";
 
 
-interface CategoryFormProps {
-
+interface AgeCategoryFormProps {
+  onClose?: () => void,
 }
 
 
 
-const CategoryForm = ({}: CategoryFormProps) => {
+const AgeCategoryForm = ({id, onClose}: AgeCategoryFormProps) => {
 
     const navigate = useNavigate();
     const {openModal, closeModal, ModalComponent} = useModalManager();
@@ -111,4 +111,4 @@ const CategoryForm = ({}: CategoryFormProps) => {
     );
 };
 
-export default CategoryForm;
+export default AgeCategoryForm;

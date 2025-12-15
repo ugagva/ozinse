@@ -1,21 +1,24 @@
 import {UserFormData} from "./UsersPage.tsx";
 import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
 import React, {useEffect, useState} from "react";
-// import BaseButton from "../../components/elements/BaseButton.tsx";
+import BaseButton from "../../components/elements/BaseButton.tsx";
 import api from "../../featechers/api/api.tsx";
 
 
+
+
 interface UserFormProps {
-    initialData?: { Title: string },
     id?: number,
+    initialData?: UserFormData,
     onClose?: () => void,
-    closeForm?: null,
     onSubmit?: (newUsers: UserFormData) => Promise<void>
 }
 
-const UserForm = ({ id, onClose, }: UserFormProps) => {
+const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
 
-    const [user, setUser] = useState<UserFormData>({Title:""});
+    const [user, setUser] = useState<UserFormData>(
+        initialData ?? { Name:"", Email:""}
+    );
     const [loading, setLoading] = useState(false);
 
 
@@ -35,15 +38,17 @@ const UserForm = ({ id, onClose, }: UserFormProps) => {
     };
 
     useEffect(() => {
-        if (id) {
+        if (initialData) setUser(initialData);
+
+       else if (id) {
             loadUserData(id).then()
         }
-    }, [id]);
+    }, [id, initialData]);
+
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-
         const {name, value} = e.target;
         setUser(prev => ({
             ...prev,
@@ -67,7 +72,7 @@ const UserForm = ({ id, onClose, }: UserFormProps) => {
             <div className="flex  flex-col  bg-white rounded-xl p-1 w-[574px] h-[433px]">
                 <div className="flex  items-center justify-between">
                     <h2 className=" text-xl  font-bold  mt-[10px] ml-[24px] ">
-                        {"Данные пользователя"}
+                        {user.Name? "Редактировать пользователя": "Создать нового пользователя"   }
 
                     </h2>
 
@@ -83,10 +88,10 @@ const UserForm = ({ id, onClose, }: UserFormProps) => {
                 <div className=" text-[#8F92A1]-800  text-[14px] font-bold">
                     {user && (
                         <input
-                            type="text"
+
                             placeholder="Имя пользователя "
-                            name="Title"
-                            value={user.Title}
+                            name="Name"
+                            value={user.Name}
                             onChange={handleChange}
                             className="flex  justify-center w-[510px] h-[46px] bg-[#8F92A10D]  m-6 p-5    border-gray-50 rounded-2xl shadow-l  "
                         />
@@ -94,12 +99,12 @@ const UserForm = ({ id, onClose, }: UserFormProps) => {
                 </div>
 
                 <div className="flex items-center justify-center m-2 p-4 gap-1">
-                    {/*<BaseButton*/}
-                    {/*    className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "*/}
-                    {/*    title="Добавить"*/}
-                    {/*    onClick={() => onSubmit?.(user)}*/}
-                    {/*>*/}
-                    {/*</BaseButton>*/}
+                    <BaseButton
+                        className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "
+                        title={user.ID ? "Сохранить" : "Добавить"}
+                        onClick={() => onSubmit?.(user)}
+                    >
+                    </BaseButton>
 
                     <button
                         type="button"

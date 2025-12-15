@@ -4,7 +4,7 @@ import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
 import React, {useEffect, useRef, useState} from "react";
 
 import BaseButton from "../../components/elements/BaseButton.tsx";
-import {GenreFormData, GenresData} from "./GenresPage.tsx";
+import {GenreFormData,} from "./GenresPage.tsx";
 import {Upload} from "lucide-react";
 import TrashSvgIcon from "../../Icons/TrashSvgIcon.tsx";
 
@@ -14,7 +14,6 @@ import api from "../../featechers/api/api.tsx";
 interface GenreFormProps {
     id?: number,
     initialData?: { Title: string },
-    onSuccess?: (data: GenresData) => void;
     onClose?: () => void,
     onSubmit?: (newGenre: GenreFormData) => Promise<void>
     setImage:  (s: string | null) => void,
@@ -49,19 +48,12 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
         }
     };
 
-
-
-
-
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-
         const {name, value} = e.target;
         setGenre(prev => ({
             ...prev,
             [name]: value
-
         }));
     }
 
@@ -114,9 +106,12 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
 
             <div className="flex  flex-col  bg-white rounded-xl p-1 w-[574px] h-[433px] ">
                 <div className="flex  items-center justify-between">
+
+
                     <h2 className=" text-lg  font-bold  mt-[10px] ml-[24px] ">
-                        {"Добавить жанр"}
+                       {genre.ID? " Редактировать  жанр": "Создать новый жанр " }
                     </h2>
+
                     <button
                         className="my-[22px] mr-[24px]"
                         onClick={onClose}
@@ -161,7 +156,7 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
                                 </div>) :
                             (
                                 <div
-                                    className="flex flex-col items-center justify-center w-[510px] h-[250px] border-2 border-dashed border-gray-300 rounded-xl cursor-pointer"
+                                    className="flex flex-col items-center justify-center w-[510px] h-[250px]  border-dashed border-gray-300 rounded-xl cursor-pointer"
                                     onDrop={handleDrop}
                                     onDragOver={(e) => e.preventDefault()}
                                     onClick={() => fileInputRef.current?.click()} // открыть input
