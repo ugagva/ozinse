@@ -16,20 +16,15 @@ interface GenreFormProps {
     initialData?: { Title: string },
     onSuccess?: (data: GenresData) => void;
     onClose?: () => void,
-
     onSubmit?: (newGenre: GenreFormData) => Promise<void>
     setImage:  (s: string | null) => void,
     image?: string | null,
-    closeForm?: null
+
 }
 
 
 const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => {
-
-
-
-
-    const [genre, setGenre] = useState<GenreFormData>({Title:""});
+    const [genre, setGenre] = useState<GenreFormData>({Title:""})
 
     const [loading, setLoading] = useState(false);
 
@@ -55,26 +50,7 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
     };
 
 
-    // const handleSubmit = async () => {
-    //     if (!genre) return;
-    //     //Редактирование
-    //     if (id) {
-    //         await fetch(`/api/genres/${id}`, {
-    //             method: "PUT",
-    //             headers: {"Content-Type": "application/json"},
-    //             body: JSON.stringify(genre),
-    //         });
-    //     } else {
-    //         // Создание
-    //         await fetch(`/api/genres`, {
-    //             method: "POST",
-    //             headers: {"Content-Type": "application/json"},
-    //             body: JSON.stringify(genre),
-    //         });
-    //     }
-    //    onSuccess?.(genre as GenresData);
-    //     navigate("/genres");
-    // };
+
 
 
 

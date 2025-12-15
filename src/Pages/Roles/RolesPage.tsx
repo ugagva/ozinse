@@ -198,6 +198,7 @@ const RolesPage = ({token}: { token: string }) => {
                                     token={token}
                                     key="new"
                                     onSuccess={handleFormSuccessAdd}
+                                    onClose={() => setIsAdding(false)}
                                 />
                                 <button
                                     onClick={() => setIsAdding(false)}
@@ -214,6 +215,7 @@ const RolesPage = ({token}: { token: string }) => {
                                 token={token}
                                 initialData={roleToEdit}
                                 onSuccess={handleFormSuccessEdit}
+                                onClose={() => setRoleToEdit(null)}
                             />
                         )}
 

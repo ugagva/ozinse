@@ -42,7 +42,7 @@ const AppRoutes = () => {
                     <Route path="/roles" element={<PrivateRoute><RolesPage token={localStorage.getItem("token")||''}  /></PrivateRoute>}/>
                     <Route path="/role/add" element={<PrivateRoute><RoleForm/></PrivateRoute>}/>
                     <Route path="/role/edit/:roleId" element={<PrivateRoute><RoleForm token={localStorage.getItem("token")||''}/></PrivateRoute>}/>
-                    <Route path="/ages" element={<PrivateRoute><AgeCategoriesPage token={localStorage.getItem("token")||''}  /></PrivateRoute>}/>
+                    <Route path="/ages" element={<PrivateRoute><AgeCategoriesPage  /></PrivateRoute>}/>
                     <Route path="/genres" element={<PrivateRoute><GenresPage /></PrivateRoute>}/>
                     <Route path="/types" element={<PrivateRoute><TypesPage token={localStorage.getItem("token") || ''}/></PrivateRoute>}/>
                     <Route path="/users" element={<PrivateRoute><UsersPage/></PrivateRoute>}/>

@@ -6,9 +6,7 @@ import {useEffect, useState} from "react";
 import api from "../../featechers/api/api.tsx";
 import Lists from "../Lists.tsx";
 import {useModalManager} from "../../components/Modals/useModalManager.tsx";
-import {RoleData} from "../Roles/RolesPage.tsx";
-import {GenreFormData} from "../Geners/GenresPage.tsx";
-import GenreForm from "../Geners/GenreForm.tsx";
+
 import UserForm from "./UserForm.tsx";
 
 

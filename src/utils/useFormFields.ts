@@ -16,7 +16,7 @@ export function useFormFields<T extends Record<string, unknown>>(initialValues: 
 
     const resetForm = () => setForm(initialValues);
     const closeForm = async () => {
-        navigate(`/roles`);
+        navigate('/roles');
 
 
     }

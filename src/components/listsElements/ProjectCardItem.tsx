@@ -34,26 +34,27 @@ const ProjectCardItem: FC<Props> = ({id, age_categories, images, genres = [], ti
     };
     return (
         <div
-            className="relative w-[240px] h-[480px]  left-10 bg-white rounded-lg shadow hover:shadow-lg transition-all p-3 mr-[48px] mb-6">
+            className="relative w-[250px] h-[500px]  left-10 bg-white rounded-lg shadow hover:shadow-lg transition-all p-3 mr-[48px] mb-6">
 
             {/*Возрастные категории*/}
-            <div className="absolute top-6 left-4 flex flex-wrap gap-1 z-10">
-                <span className="bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded-md">
+            <div className="absolute top-6 left-4 flex flex-wrap gap-1 p-2 z-10">
+                <span className="bg-black bg-opacity-40 text-white text-xs px-3 py-2 rounded-md">
             {ages.join(',')}
           </span>
             </div>
             {/*Обложка */}
             <img
+                className="rounded-2xl w-full h-[320px] object-cover"
                 src={
                     images
                 }
 
-                className="rounded-md w-full h-[334px] object-cover"
+
                 onClick={handleItemClick}
             />
 
             {/* Название */}
-            <h2 className="mt-1 text-base font-semibold font-Roboto line-clamp-2"
+            <h2 className="mt-3 text-base font-semibold font-Roboto line-clamp-2"
 
             >{title}</h2>
 

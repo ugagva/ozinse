@@ -39,7 +39,7 @@ const ProjectsPage = () => {
             <div className="flex-1  ">
                 <Header/>
 
-                <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
+                <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-l mr-[250px] mt-[32px] ">
 
                     <BodyHeader
                         value={'Проекты'}

@@ -2,44 +2,74 @@ import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
 import { useNavigate} from "react-router-dom";
 import BaseButton from "../../components/elements/BaseButton.tsx";
 import {useModalManager} from "../../components/Modals/useModalManager.tsx";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AgeCategoriesData} from "./AgeCategoriesPage.tsx";
+import api from "../../featechers/api/api.tsx";
 
 
 interface CategoryFormProps {
-    token?: string;
 
 }
 
-const CategoryForm = ({token}: CategoryFormProps) => {
+
+
+const CategoryForm = ({}: CategoryFormProps) => {
+
     const navigate = useNavigate();
     const {openModal, closeModal, ModalComponent} = useModalManager();
-    const [categories, setCategories] = useState<Array<AgeCategoriesData>>([]);
+    const [category, setCategory] = useState<Array<AgeCategoriesData>>([]);
+    const [loading, setLoading] = useState(false);
 
 
-    const handleSubmit = async () => {
-        let result: (AgeCategoriesData & { id: number }) | undefined;
-        console.log("Creating categories with:",);
 
-        if (category.id) {
+    const loadCategoryData = async (id: number) => {
+        try {
+            setLoading(true);
+            const response = await api.get(`v1/age-categories/${id}`);
 
-            result = await updateRole(category.id);
-        } else {
-            // создание новой роли
-            result = await createCategory(form);
-
+            setCategory(response.data); // <-- заполняем форму
+        } catch (error) {
+            console.error("Ошибка при загрузке категории", error);
+        } finally {
+            setLoading(false);
         }
-
-        if (result) {
-            openModal("added", {
-                label: `Каегория "${result.title}" успешно ${form.id ? "обновлена" : "создана"}!`,
-                onConfirm: () => closeModal(),
-                closeModal,
-            });
-            if (onSuccess) onSuccess(result);
-            // 🔹 закрываем модалку
-        } else alert("Категория не создана")
     };
+
+    useEffect(() => {
+        if (id) {
+            loadCategoryData(id).then()
+        }
+    }, [id]);
+    //
+    // const handleSubmit = async () => {
+    //     let result: (AgeCategoriesData & { id: number }) | undefined;
+    //     console.log("Creating categories with:",);
+    //     if (category.id) {
+    //
+    //         result = await updateRole(category.id);
+    //     } else {
+    //         result = await createCategory(form);   // создание новой роли
+    //     }
+    //
+    //     if (result) {
+    //         openModal("added", {
+    //             label: `Каегория "${result.Title}" успешно ${result.id ? "обновлена" : "создана"}!`,
+    //             onConfirm: () => closeModal(),
+    //             closeModal,
+    //         });
+    //         if (onSuccess) onSuccess(result);     // 🔹 закрываем модалку
+    //
+    //     } else alert("Категория не создана")
+    // };
+
+
+    if (loading)
+        return (
+            <div className="flex items-center justify-center text-blue-500 p-2">
+                Загружаем возрастную категорию для редактирования...
+            </div>
+        );
+
 
 
     return (
@@ -55,8 +85,6 @@ const CategoryForm = ({token}: CategoryFormProps) => {
                     >
                         <CrossSvgIcon/>
                     </button>
-
-
                 </div>
 
 

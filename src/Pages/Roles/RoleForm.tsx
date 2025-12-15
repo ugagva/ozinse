@@ -6,7 +6,8 @@ import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
 import BaseButton from "../../components/elements/BaseButton.tsx";
 import MultiSelect from "../../components/elements/MultiSelect.tsx";
 import {useFormFields} from "../../utils/useFormFields.ts";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
+
 
 
 interface RoleFormProps {
@@ -14,6 +15,7 @@ interface RoleFormProps {
     token?: string,
     initialData?: RoleData,
     roleId?: number,
+    onClose?: () => void,
 
 }
 
@@ -23,6 +25,7 @@ const RoleForm: FC<RoleFormProps> = ({
                                          initialData,
                                          roleId,
                                          onSuccess,
+                                        onClose,
 
 
                                      }) => {
@@ -30,7 +33,7 @@ const RoleForm: FC<RoleFormProps> = ({
     const {createRole, updateRole, getRoleById} = useRoles(token);
 
     const {openModal, closeModal, ModalComponent} = useModalManager();
-    const navigate = useNavigate();
+
 
     const { roleId: routeRoleId } = useParams();
     // const [search, setSearch] = useState("");
@@ -56,7 +59,6 @@ const RoleForm: FC<RoleFormProps> = ({
     useEffect(() => {
         console.log("RoleForm получил props:", {roleId, initialData,  routeRoleId},);
         if (initialData && initialData.id !== form.id) {
-
             setForm(initialData);
 
         } else  if (routeRoleId) { // если редактирование через URL
@@ -111,7 +113,7 @@ const RoleForm: FC<RoleFormProps> = ({
                     <h2 className="text-lg  font-bold  mt-[10px] ml-[24px]"> Добавить роль </h2>
                     <button
                         className="my-[22px] mr-[24px]"
-                        onClick={()=>navigate(`/roles`)}
+                        onClick={onClose}
                     >
                         <CrossSvgIcon/>
                     </button>
@@ -183,7 +185,6 @@ const RoleForm: FC<RoleFormProps> = ({
                         onChange={handleMultiSelectChange("roles")}
                         labelClassName="absolute -top-2 left-6 bg-white px-1  font-medium text-xs text-[#8F92A1] "
                     >
-
                     </MultiSelect>
 
 
