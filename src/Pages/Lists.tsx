@@ -2,13 +2,17 @@ import EditSvgIcon from "../Icons/EditSvgIcon.tsx";
 import TrashSvgIcon from "../Icons/TrashSvgIcon.tsx";
 import {FC,} from "react";
 
+import CameraSvgIcon from "../Icons/CameraSvgIcon.tsx";
 
-type Users = {
+
+type User = {
     ID: number,
     Name: string,
     Email: string,
     CreatedAt: string;
     UpdatedAt: string;
+    Phone: string;
+    DateOfBirth:string;
 }
 
 type Genre = {
@@ -20,111 +24,158 @@ type AgeCategory = {
     ID: number;
     Title: string;
 }
-
+type Type ={
+    ID: number;
+    Title: string;
+}
 
 type ListsItemsProps =
+    |{
+    type: "type";
+    data: Type;
+    onDelete: () => void,
+    handleEdit?: (data:Type) => void,
+}
 
- |  {
-        type: "ageCategory";
-        data: AgeCategory;
-        onDelete: () => void,
-        handleEdit?: (data:AgeCategory) => void,
-    }
+    | {
+    type: "ageCategory";
+    data: AgeCategory;
+    onDelete: () => void,
+    handleEdit?: (data:AgeCategory) => void,
+}
 
-|{
+    | {
     type: "genre";
     data: Genre;
     onDelete: () => void,
-    handleEdit ? : (data:Genre) => void,
+    handleEdit?: (data: Genre) => void,
 }
 
-|{
+    | {
     type: "user";
-    data: Users;
+    data: User;
     onDelete: () => void,
-    handleEdit ? : (data:Users) => void;
+    handleEdit?: (data: User) => void;
 }
+
 
 
 const Lists: FC<ListsItemsProps> = (props: ListsItemsProps) => {
 
-    const renderEditButton=()=>{
-        if (!props.handleEdit) return null;
+
+
+
+
+    // Кнопки редактирования
+    const renderEditButton = () => {
+        if (!props.handleEdit ) return null;
+
         switch (props.type) {
-            case "user":
+            case "user" :
                 return (
-                    <button className=" text-white px-2 py-1 rounded hover:bg-blue-600"
-                            onClick={()=>props.handleEdit?.(props.data)}>
+                    <button className=" text-blue px-2 py-1  rounded hover:text-blue-600"
+                            onClick={() => props.handleEdit?.(props.data)}>
                         <EditSvgIcon/>
                     </button>
 
                 );
             case "ageCategory":
-                return (
-                    <button className=" text-white px-2 py-1 rounded hover:bg-blue-600"
-                        onClick={() => props.handleEdit?.(props.data)}>
-                        <EditSvgIcon/>
-                    </button>
-                );
             case "genre":
                 return (
-                    <button className=" text-white px-2 py-1 rounded hover:bg-blue-600"
-                        onClick={() => props.handleEdit?.(props.data)}>
+                    <button className=" text-blue px-2 py-1  rounded hover:text-blue-600"
+                            onClick={() => props.handleEdit?.(props.data)}>
                         <EditSvgIcon/>
                     </button>
                 );
-        }
+
+            case "type":
+                return (
+                    <button className=" text-blue px-2 py-1  rounded hover:text-blue-600"
+                            onClick={() => props.handleEdit?.(props.data)}>
+                        <EditSvgIcon/>
+                    </button>
+                );
+        };
 
 
     }
 
 
-    return (
+
+           // Данные пользователя
+    const renderUserFields = () => {
+        if (props.type !== "user") return null;
+        const usersFields = [
+            {label: "Name", value: props.data.Name},
+            {label: "Email", value: props.data.Email},
+            {label: "Created", value: props.data.CreatedAt},
+            {label: "Updated", value: props.data.UpdatedAt},
+            {label: "Phone", value: props.data.Phone},
+            {label: "Date of Birth", value: props.data.DateOfBirth},
+        ];
+        return (
+            <div className="grid gap-2 ">
+                {usersFields.map((field) => (
+                    <div key={field.label} className="flex text-sm">
+                        <span className="font-bold w-32">{field.label}:</span>
+                        <span>{field.value ?? "—"}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+
+        return (
         <div>
-            <li
-                className="relative w-[538px] h-[180px]  left-10 bg-white rounded-xl  transition-all p-2 mr-[48px] m-2">
-                {props.type === "user" && (
-                    <>
-
-                            <div >{"Name:"}<b>{props.data.Name}</b> </div>
-                            <div >{"Email:"}<b>{props.data.Email}</b></div>
-                            <div >Created:<b>{props.data.CreatedAt}</b> </div>
-                            <div >Updated:<b>{props.data.UpdatedAt}</b></div>
-                           <div >Phone:<b>{props.data.UpdatedAt}</b> </div>
-                        <div >Date of Birth:<b>{props.data.UpdatedAt}</b> </div>
+            <ul
+                className=" relative w-full  max-w-[538px]  bg-white  rounded-xl mt-4 mb-4  p-2 transition-all mx-[48px] ">
+                <div className="flex  ">
 
 
-                    </>
 
 
-                )}
+                    {renderUserFields()}
+
+                    {( props.type === "type" || props.type === "genre" || props.type === "ageCategory" ) && (
+
+                        <p className="text-roboto  font-bold ">
+                            {props.data.Title}
+
+                        </p>
+                    )}
 
 
-                {(props.type === "genre" || props.type === "ageCategory") && (
-                    <p className="text-xl font-bold">
-                        {props.data.Title}
-                    </p>
-                )}
-
-
-                <div className=" flex gap-1 absolute bottom-2 right-2">
-                    {renderEditButton()}
-                    {/*<button*/}
-                    {/*    onClick={() => props.handleEdit?.(props.data)}*/}
-                    {/*    className=" text-white px-2 py-1 rounded hover:bg-blue-600"*/}
-                    {/*>*/}
-                    {/*   */}
-                    {/*</button>*/}
-                    <button
-                        onClick={props.onDelete}
-                        className=" text-black px-2 py-1 rounded hover:bg-red-600"
-                    >
-                        <TrashSvgIcon/>
-                    </button>
                 </div>
-            </li>
+
+                <div className=" flex items-end  justify-between  ">
+                    <div className=" flex  ">
+                        {(props.type === "type" || props.type === "genre") && (
+                            <button
+                                onClick={()=>{}}
+                                className="text-green-600 rounded hover:text-blue-600"
+                            >
+                                <CameraSvgIcon className="color-[]"/>
+                            </button>
+
+                        )}
+
+                    </div>
+                    <div className="  ">
+                        {renderEditButton()}
+                        <button
+                            onClick={props.onDelete}
+                            className=" text-black rounded hover:text-red-600"
+                        >
+                            <TrashSvgIcon/>
+                        </button>
+                    </div>
+                </div>
+
+
+            </ul>
         </div>
-    );
+        );
 };
 
 export default Lists;

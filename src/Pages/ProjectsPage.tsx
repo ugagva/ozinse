@@ -2,7 +2,7 @@ import SideBar from "../components/sidebar'sElements/SideBar.tsx";
 import Header from "../components/page'sElements/Header.tsx";
 
 
-import {useContext} from "react";
+import {useContext,} from "react";
 
 
 
@@ -10,6 +10,7 @@ import BodyHeader from "../components/page'sElements/BodyHeader.tsx";
 import VideoListContext from "../components/context/VideoListProvider.tsx";
 import {useModalManager} from "../components/Modals/useModalManager.tsx";
 import {useNavigate} from "react-router-dom";
+import {useProjectSearch} from "../utils/useProjectSearch.tsx";
 import ProjectCardItem from "../components/listsElements/ProjectCardItem.tsx";
 
 
@@ -17,7 +18,7 @@ import ProjectCardItem from "../components/listsElements/ProjectCardItem.tsx";
 const ProjectsPage = () => {
     const navigate = useNavigate();
     const {videoItems, loading, deleteVideoItem, } = useContext(VideoListContext)
-    const {    openModal, closeModal, ModalComponent  } = useModalManager();
+    const {openModal, closeModal, ModalComponent  } = useModalManager();
 
 
 
@@ -27,11 +28,11 @@ const ProjectsPage = () => {
      navigate("/projects/add");
     };
 
+
+
+    const filteredProjects = useProjectSearch(videoItems);
+
     if (loading) return <p>Загрузка страницы со списком проектов...</p>;
-
-
-
-
 
     return (
         <div className=" flex flex-grow  ">
@@ -43,15 +44,18 @@ const ProjectsPage = () => {
 
                     <BodyHeader
                         value={'Проекты'}
+                        count={videoItems.length}
                         onClick={handleAddProject}/>
 
-                    <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
+                    <div className="flex flex-wrap mt-[80px] p-4 mb-[14px]  ">
 
 
                         {videoItems.length === 0 ? (
                                 <p className="text-center w-full">Нет доступных проектов.</p>
                             ) :
-                            (Array.isArray(videoItems) && videoItems.map((videoItem) => (
+                            (Array.isArray(filteredProjects) && filteredProjects
+
+                                    .map((videoItem) => (
                                 <ProjectCardItem key={videoItem.id}
                                     {...videoItem}
                                            onDelete={() => {

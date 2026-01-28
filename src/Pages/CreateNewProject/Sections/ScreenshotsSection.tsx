@@ -103,32 +103,32 @@ const ScreenshotsSection = ({
 
 
         return (
-            <div className=" flex w-full">
-                <div className="w-full mx-auto gap-4 flex flex-col w-[760px] h-[533px] relative ">
+            <div className=" flex w-full ">
+                <div className="w-full mx-auto gap-4 flex flex-col  relative ">
 
-                                            {/* Обложка */}
+                    {/* Обложка */}
 
                     <h1 className=" text-2xl font-bold mb-4">Обложка</h1>
                     <p className="text-m "> Рекомендуется использовать картинки размером не менее 375×550px</p>
 
-                    <div className="mt-2 relative flex flex-col  items-center justify-center w-full  ">
+                    <div className="mt-2 relative flex flex-col  items-center justify-center w-full   ">
                         <label
                             htmlFor="cover-upload"
                             className="flex flex-col items-center justify-center w-[760px] h-[200px] border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
 
                             {cover ? (
                                 // превью если обложка выбрана
-                                <div className=" ">
+                                <div className=" relative w-[150px] h-[220px] rounded-xl overflow-hidden">
                                     <img
                                         src={cover}
                                         alt="Превью обложки"
-                                        className="w-full h-full "
+                                        className="absolute inset-0 w-full h-full  "
                                     />
                                     {/*Кнопка удаления*/}
                                     <button
                                         type="button"
                                         onClick={handleRemoveCover}
-                                        className="absolute top-2 right-2 bg-black bg-opacity-60 text-white rounded-full p-1 hover:bg-opacity-80"
+                                        className="absolute top-2 right-2  bg-[#FFFFFF66]  bg-opacity-60 text-white rounded-full p-1 hover:bg-opacity-80"
                                     >
                                         <TrashSvgIcon className="w-4 h-4 "/>
                                     </button>
@@ -138,7 +138,8 @@ const ScreenshotsSection = ({
                                 <>
                                     <Upload className="w-10 h-10 text-gray-400"/>
 
-                                    <span className="mt-2 text-sm text-gray-500">Перетищите картинку или  <span className="text-blue-600">загрузите</span></span>
+                                    <span className="mt-2 text-sm text-gray-500">Перетищите картинку или  <span
+                                        className="text-blue-600">загрузите</span></span>
                                 </>
                             )}
                         </label>
@@ -155,15 +156,17 @@ const ScreenshotsSection = ({
                         />
 
                     </div>
-                                        {/*  СКРИНШОТЫ  */}
+                    {/*  СКРИНШОТЫ  */}
                     <h1 className="text-2xl font-bold mb-4">Скриншоты</h1>
                     <p className="text-m "> Рекомендуется использовать картинки размером не менее 400×226px</p>
+
                     <div
-                        className="flex flex-col items-center justify-center relative  w-[760px] h-[200px] border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
+                        className="flex flex-col items-center justify-center relative object-cover  w-[760px] h-[200px] border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
 
-
+                        <Upload className="w-10 h-10 text-gray-400"/>
                         <div className="flex flex-col  items-center justify-center ">
-                            <Upload className="w-10 h-10 text-gray-400"/>
+
+
                             <span className="mt-2 text-sm text-gray-500">Перетищите картинку или  <span
                                 className="text-blue-600">загрузите</span></span>
 
@@ -194,42 +197,43 @@ const ScreenshotsSection = ({
                                 onChange={handleFileChange}/>
                         </div>
 
-                        {/* Превью */}
-                        <div className=" grid grid-cols-4  gap-4 ">
 
 
-                            {screenshots.map((s, i) => {
-                                    const src = s.type === "url" ? (s.value as string) : URL.createObjectURL(s.value as File);
-                                    return (
-                                        <div key={i}
-                                             className="group relative rounded-xl overflow-hidden shadow w-auto h-[108px] m-3">
+                    </div>
+                    {/* Превью */}
+                    <div className=" grid grid-cols-4  gap-4 ">
 
-                                            <img
-                                                className="w-full h-full  object-cover   "
-                                                src={src}
-                                                alt={`screenshot-${i}`}
-                                            />
+                        {screenshots.map((s, i) => {
+                                const src = s.type === "url" ? (s.value as string) : URL.createObjectURL(s.value as File);
+                                return (
+                                    <div key={i}
+                                         className="group relative rounded-xl  shadow w-auto h-[108px] m-3">
 
-                                            {/* Полупрозрачный overlay при hover */}
-                                            <div
-                                                className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleRemove(i)}
-                                                className="absolute top-2 right-2 bg-gray-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-20
-                                        opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                                            >
-                                                <TrashSvgIcon className="w-4 h-4  "/>
+                                        <img
+                                            className=" rounded-xl overflow-hidden w-full h-full object-cover  "
+                                            src={src}
+                                            alt={`screenshot-${i}`}
+                                        />
 
-                                            </button>
+                                        {/* Полупрозрачный overlay при hover */}
+                                        <div
+                                            className="absolute inset-0  "/>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemove(i)}
+                                            className="absolute top-2 right-2  bg-[#FFFFFF66] text-[ #171717CC] rounded-full w-6 h-6 flex items-center justify-center
+                                        "
+                                        >
+                                            <TrashSvgIcon className="w-4 h-4  "/>
+
+                                        </button>
 
 
-                                        </div>
-                                    )
-                                }
-                            )}
+                                    </div>
+                                )
+                            }
+                        )}
 
-                        </div>
                     </div>
                 </div>
             </div>

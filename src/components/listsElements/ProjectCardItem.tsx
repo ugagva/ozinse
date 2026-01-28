@@ -32,26 +32,31 @@ const ProjectCardItem: FC<Props> = ({id, age_categories, images, genres = [], ti
         e.stopPropagation();
         navigate(`/projects/edit/${id}`);
     };
+
+
+
+
+
     return (
         <div
-            className="relative w-[250px] h-[500px]  left-10 bg-white rounded-lg shadow hover:shadow-lg transition-all p-3 mr-[48px] mb-6">
+            className="relative w-[250px] h-[500px]  left-10 bg-white rounded-lg shadow hover:shadow-lg transition-all p-4 mr-[28px] mb-6 overflow-hidden">
 
             {/*Возрастные категории*/}
-            <div className="absolute top-6 left-4 flex flex-wrap gap-1 p-2 z-10">
+            <div className="absolute top-6 left-4 flex flex-wrap m-1 gap-1 p-2 z-10">
                 <span className="bg-black bg-opacity-40 text-white text-xs px-3 py-2 rounded-md">
             {ages.join(',')}
           </span>
             </div>
             {/*Обложка */}
-            <img
-                className="rounded-2xl w-full h-[320px] object-cover"
-                src={
-                    images
-                }
 
-
-                onClick={handleItemClick}
-            />
+            {/* Обёртка картинки */}
+            <div className="overflow-hidden rounded-xl w-full h-[320px]">
+                <img
+                    className="w-full h-full object-cover cursor-pointer"
+                    src={images}
+                    onClick={handleItemClick}
+                />
+            </div>
 
             {/* Название */}
             <h2 className="mt-3 text-base font-semibold font-Roboto line-clamp-2"
@@ -80,11 +85,11 @@ const ProjectCardItem: FC<Props> = ({id, age_categories, images, genres = [], ti
 
             <div className="absolute bottom-2 right-2 flex flex-wrap gap-2">
 
-                <button className="p-1 hover:bg-red-100 rounded-full " onClick={onDelete}>
-                    <TrashSvgIcon/>
+                <button className="p-1 rounded-full " onClick={onDelete}>
+                    <TrashSvgIcon className="text-red-500  hover:text-red-700"  />
                 </button>
-                <button className="p-1 hover:bg-blue-100 rounded-full" onClick={handleEdit}>
-                    <EditSvgIcon/>
+                <button className="p-1 hover:text-blue-500 rounded-full" onClick={handleEdit}>
+                    <EditSvgIcon className="text-gray-500  hover:text-blue-500" />
                 </button>
             </div>
             </div>

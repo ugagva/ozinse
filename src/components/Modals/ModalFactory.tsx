@@ -6,6 +6,7 @@ import ModalAddProjectOnMain from "./ModalAddProjectOnMain.tsx";
 import RoleForm from "../../Pages/Roles/RoleForm.tsx";
 import {RoleData} from "../../Pages/Roles/RolesPage.tsx";
 import ModalRoleEdit from "./ModalRoleEdit.tsx";
+import ModalConfirmCancel from "./ModalConfirmCancel.tsx";
 
 
 
@@ -54,6 +55,13 @@ export interface ModalRoleEditProps {
     closeModal: () => void;
 }
 
+export interface ModalConfirmCancelProps {
+    onConfirm: () => void;
+    closeModal: () => void;
+ };
+
+
+
 // Пример будущих модальных окон:
 export interface TextModalProps {
     initialValue: string;
@@ -67,6 +75,7 @@ export interface TextModalProps {
     addOnMain:ModalAddProjectOnMain,
     roleForm:RoleForm,
     editRole:ModalRoleEdit ,
+    cancel:ModalConfirmCancel,
 } as const;
 
 
@@ -78,6 +87,7 @@ export  type ModalComponentPropsMap = {
     addOnMain:ModalAddProjectOnMainProps;
     roleForm:ModalRoleFormProps;
     editRole:ModalRoleEditProps ;
+    cancel:ModalConfirmCancelProps;
 
 };
 

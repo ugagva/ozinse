@@ -20,7 +20,7 @@ import ProjectsOnMain from "../../Pages/ProjectsOnMain/ProjectsOnMain.tsx";
 
 import GenresPage from "../../Pages/Geners/GenresPage.tsx";
 import AgeCategoriesPage from "../../Pages/Age_categories/AgeCategoriesPage.tsx";
-import TypesPage from "../../Pages/TypesPage.tsx";
+import TypesPage from "../../Pages/Types/TypesPage.tsx";
 
 
 
@@ -44,7 +44,7 @@ const AppRoutes = () => {
                     <Route path="/role/edit/:roleId" element={<PrivateRoute><RoleForm token={localStorage.getItem("token")||''}/></PrivateRoute>}/>
                     <Route path="/ages" element={<PrivateRoute><AgeCategoriesPage  /></PrivateRoute>}/>
                     <Route path="/genres" element={<PrivateRoute><GenresPage /></PrivateRoute>}/>
-                    <Route path="/types" element={<PrivateRoute><TypesPage token={localStorage.getItem("token") || ''}/></PrivateRoute>}/>
+                    <Route path="/types" element={<PrivateRoute><TypesPage/></PrivateRoute>}/>
                     <Route path="/users" element={<PrivateRoute><UsersPage/></PrivateRoute>}/>
 {/*<Route path="/ages" element={<PrivateRoute><AgesPage/></PrivateRoute>}/>*t/}
 {/*<Route path="/users" element={<PrivateRoute><UsersPage/></PrivateRoute>}/>*/}

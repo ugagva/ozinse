@@ -2,13 +2,14 @@ import Header from "../../components/page'sElements/Header.tsx";
 import BodyHeader from "../../components/page'sElements/BodyHeader.tsx";
 
 import SideBar from "../../components/sidebar'sElements/SideBar.tsx";
-import  {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 import Lists from "../Lists.tsx";
 import {useModalManager} from "../../components/Modals/useModalManager.tsx";
 import api from "../../featechers/api/api.tsx";
 
 import GenreForm from "./GenreForm.tsx";
+import {useSearch} from "../../components/context/SearchContext.tsx";
 
 
 
@@ -29,9 +30,9 @@ const GenresPage = () => {
     const {openModal, closeModal, ModalComponent} = useModalManager();
     const [genreToEdit, setGenreToEdit] = useState<GenreFormData | null>(null);
     const [isAdding, setIsAdding] = useState(false);
-    const [image, setImage] = useState<string|null>(null);
+    const [image, setImage] = useState<string | null>(null);
 
-
+    const {search} = useSearch()
 
     // Загружаем список жанров на страницу!!!
     const fetchGenres = async () => {
@@ -51,7 +52,7 @@ const GenresPage = () => {
     }, []);
 
 
-    // Добавляем новый
+    ////////////////////////////////////////////////// Создаем новый
     const createGenre = async (newGenre: GenreFormData) => {
         try {
             const response = await api.post("v1/genres", newGenre, {
@@ -64,49 +65,38 @@ const GenresPage = () => {
         }
     }
 
-    //
-    // const updateGenre = async (id: number, updatedGenre: GenreFormData) => {
-    //     try {
-    //         await api.patch(`v1/genres/${id}`, updatedGenre, {
-    //             headers: {"Content-Type": "application/json"}
-    //         });
-    //         await fetchGenres();
-    //     } catch (error) {
-    //         console.error("Ошибка обновления жанра:", error);
-    //     }
-    // };
 
 
-    // const handleGenreSuccessAdd = (newGenre: GenresData & { id: number }) => {
-    //     setGenres((prev) => [...prev, newGenre]);
-    //     setIsAdding(false);
-    // };
-    //
-    // const handleGenreSuccessEdit = (updated: GenresData & { id: number }) => {
-    //     setGenres((prev) =>
-    //         prev.map((g) => (g.ID === updated.ID ? updated : g))
-    //     );
-    //     setGenreToEdit(null);
-    // };
-
-// Добавляем
-    const handleAdd = () => {
+/////////////////////////////////////////////  Действие по кнопке ДОБАВИТЬ
+    const handleAdd = async () => {
         setIsAdding(true);
         setGenreToEdit(null);
-
     }
-// Редактируем
-    const handleEdit = (genre: GenresData) => {
-        setGenreToEdit({ID: genre.ID,
-            Title: genre.Title,
-           });// можно сюда подставить genre.Image, если есть});
 
-        setIsAdding(false);
+/////////////////////////////Редактирем старый
+//     const onUpdate = async (id: { Title: string }) => {
+//         let result: (GenresData & { ID: number }) | undefined;
+//
+//       try {
+//           const response = await api.put(`v1/genres/${id}`,  )
+//           setGenres(response.data as GenresData[])
+//           await fetchGenres();
+//           return response.data;
+//       } catch (error) {
+//           console.log("Ошибка при попытке записать жанр:",error)
+//       }
+//
+//         if (result) {
+//             openModal("added", {
+//                 label: ` Жанр "${result.Title}" успешно ${result.ID ? "обновлена" : "создана"}!`,
+//                 onConfirm: () => closeModal(),
+//                 closeModal,
+//             });
+//             // 🔹 закрываем модалку
+//         } else alert("Жанр не записан ")
+//     };
 
-    };
-
-
-    // Удаляем жанр
+/////////////// Удаляем жанр
     const handleDelete = async (id: number) => {
         try {
             await api.delete(`v1/genres/${id}`);
@@ -116,8 +106,33 @@ const GenresPage = () => {
         }
     };
 
+    ////////////////////Действие по кнопке РЕДАКТИРОВАТЬ
+    const  handleEdit = (genre:GenresData)=> {
+        setGenreToEdit({
+            ID: genre.ID,
+            Title: genre.Title,
+        });// можно сюда подставить genre.Image, если есть});
+        setIsAdding(false);
+    }
+
+    // const handleSubmit = async () => {
+    //     let result: (GenresData & { id: number }) | undefined;
+    //     console.log("Creating genre with:", );
+    //
+    //     if (genres.id) {
+    //         // изменение роли
+    //         result = await onUpdate(genre.ID,);
+    //     } else {
+    //         // создание новой роли
+    //         result = await createGenre();
+    //     }
+
+
+
+
 
     if (loading) return <div>Загрузка списка жанров...</div>;
+
     return (
         <div>
             <div className="flex flex-grow">
@@ -129,59 +144,60 @@ const GenresPage = () => {
                         <BodyHeader
                             value={'Жанры'}
                             onClick={handleAdd}
+                            count={genres.length}
 
                         />
 
                         {isAdding && (
                             <GenreForm
                                 key="new"
-                                initialData={ {Title:""}}
+                                initialData={{Title: ""}}
                                 onSubmit={createGenre}
                                 onClose={() => setIsAdding(false)}
                                 image={image}
                                 setImage={setImage}
-                               />
+                            />
                         )}
-                        {genreToEdit &&(
+                        {genreToEdit && (
                             <GenreForm
                                 key={genreToEdit.ID}
                                 id={genreToEdit.ID}
-                                initialData={{Title:genreToEdit.Title}}
-                                onSubmit={createGenre}
+                                initialData={{Title: genreToEdit.Title}}
+
                                 onClose={() => setGenreToEdit(null)}
                                 image={image}
-                                setImage={setImage}
+                                setImage={setImage}>
 
-
-                            />
+                            </GenreForm>
                         )}
+                        {genres.filter(genre=> {
+                            return genre.Title
+                                .toLowerCase()
+                                .includes(search.toLowerCase())
+                        })
+                            .map((genre,) => (
+                            <Lists key={genre.ID}
+                                   type="genre"
+                                   data={genre}
+                                   handleEdit={() => handleEdit(genre)}
+                                   onDelete={() => {
+                                       openModal("delete", {
+                                           label: `жанр "${genre.Title}"`,
+                                           onConfirm: async () => {
+                                               await handleDelete(genre.ID);
+                                               setGenres(((prev) => prev.filter((g) => g.ID !== genre.ID)))// здесь удаляем выбранный жанр
+                                               closeModal()
+                                           },
+                                           closeModal,
+                                       })
+                                   }}
 
-                        <ul>
-                            {genres.map((genre,) => (
-                                <Lists key={genre.ID}
-                                       type="genre"
-                                       data={genre}
-                                       handleEdit={() => handleEdit(genre)}
-                                       onDelete={() => {
-                                           openModal("delete", {
-                                                   label: `жанр "${genre.Title}"`,
-                                                   onConfirm: async () => {
-                                                       await handleDelete(genre.ID);
-                                                       setGenres(((prev) => prev.filter((g) => g.ID !== genre.ID)))// здесь удаляем выбранный жанр
-                                                       closeModal()
-                                                   },
-                                                   closeModal,
-                                               }
-                                           )
-                                       }}
+                            >
 
-                                     >
+                            </Lists>
 
-                                </Lists>
-
-                            ))
-                            }
-                        </ul>
+                        ))
+                        }
 
 
                         {/*Рендер модалки*/}

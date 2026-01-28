@@ -27,11 +27,10 @@ const ProjectsOnMain = () => {
 
             openModal('addOnMain', {
                 label: 'Добавить проект на главную',
-                availableProjects: availableForAdding.map((v)=>({
-                        id:v.id,
-                        title:v.title   // передаем доступные проекты
-                })
-
+                availableProjects: availableForAdding.map((v) => ({
+                        id: v.id,
+                        title: v.title   // передаем доступные проекты
+                    })
                 ),
                 onChange: (selectedIds: number[]) => {
                     setMainProjects(prev => [...prev, ...selectedIds]);
@@ -58,13 +57,18 @@ const ProjectsOnMain = () => {
                 <Header/>
 
                 <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
-                    <BodyHeader value={'Проекты на главной'} onClick={handleAddProject}/>
+                    <BodyHeader
+                        value={'Проекты на главной'}
+                        count={videoItems.length}
+                        onClick={handleAddProject}
+                    />
 
                     <div className="flex flex-wrap mt-[80px] mb-[14px]  ">
                         {filteredItems.length === 0 ? (
                             <p className="text-center w-full">На главной старнице нет проектов. </p>)
                         :
                             ( Array.isArray(filteredItems) && filteredItems.map((videoItem) =>(
+
                                 <ProjectCardItem key={videoItem.id}
                                                  {...videoItem}
                                                  onDelete={() => {

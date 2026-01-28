@@ -38,9 +38,9 @@ interface UploadEpisodes {
     episode: number;
     videoLink: string;
 }
-interface Cover {
-    id: number;
-}
+// interface Cover {
+//     id: number;
+// }
 interface Screenshot {
     type: "file" | "url";
     value: File | string;
@@ -52,7 +52,7 @@ interface NewProject {
     typeId: string;
     ageCategoryId: string;
     releaseYear: number | null;
-    durationInMins: number | null;
+    durationInMints: number | null;
     keywords: string;
     description: string;
     director: string;
@@ -68,6 +68,7 @@ interface NewProject {
         seasonCount: number,
         episodes: UploadEpisodes[];
     },
+
 
 
 }
@@ -99,7 +100,7 @@ const AddedProjects = () => {
         typeId: "",
         ageCategoryId: "",
         releaseYear: null,
-        durationInMins: null,
+        durationInMints: null,
         keywords: "",
         description: "",
         director: "",
@@ -116,6 +117,8 @@ const AddedProjects = () => {
             seasonCount: 1,
             episodes: []
         },
+
+
 
     });
 
@@ -134,7 +137,7 @@ const AddedProjects = () => {
                 description: data.description,
                 typeId: data.type_id,
                 releaseYear: data.release_year,
-                durationInMins: data.duration_in_mins,
+                durationInMints: data.duration_in_mins,
                 director: data.director,
                 producer: data.producer,
                 keywords: data.keywords,
@@ -168,7 +171,7 @@ const AddedProjects = () => {
         const numericProjectId = Number(projectId);
         const numericTypeId = Number(newProject.typeId);
         const numericReleaseYear = Number(newProject.releaseYear);
-        const numericDuration = Number(newProject.durationInMins);
+        const numericDuration = Number(newProject.durationInMints);
 
         if (isNaN(numericTypeId)) {
             alert("Выберите корректный тип проекта");
@@ -192,7 +195,7 @@ const AddedProjects = () => {
                 title: newProject.title,
                 description: newProject.description,
                 release_year: Number(newProject.releaseYear),
-                duration_in_mins: Number(newProject.durationInMins),
+                duration_in_mints: Number(newProject.durationInMints),
                 director: newProject.director,
                 producer: newProject.producer,
                 keywords: Array.isArray(newProject.keywords)
@@ -213,7 +216,7 @@ const AddedProjects = () => {
                 body: JSON.stringify(payload),
             });
 
-            if (!response.ok) throw new Error("Ошибка обновления проекта");
+
 
             const updatedProject = await response.json();
             console.log("Проект обновлён:", updatedProject);
@@ -246,6 +249,7 @@ const AddedProjects = () => {
                 },
                 closeModal,
             });
+
 
 
         } catch (error) {
@@ -307,7 +311,7 @@ const AddedProjects = () => {
         formData.append("title", newProject.title); // "ключ" , "значение"
         formData.append("description", newProject.description);
         // formData.append("release_year", newProject.releaseYear.toString());
-        // formData.append("duration_in_mins", newProject.durationInMins.toString());
+        // formData.append("duration_in_mints", newProject.durationInMints.toString());
         formData.append("director", newProject.director);
         formData.append("producer", newProject.producer);
         formData.append("keywords", Array.isArray(newProject.keywords) ? newProject.keywords.join(", ") : newProject.keywords || "");
@@ -341,7 +345,7 @@ const AddedProjects = () => {
             title: newProject.title,
             description: newProject.description,
             release_year: newProject.releaseYear,
-            duration_in_mins: newProject.durationInMins,
+            duration_in_mints: newProject.durationInMints,
             director: newProject.director,
             producer: newProject.producer,
             keywords: Array.isArray(newProject.keywords)
@@ -485,7 +489,16 @@ const AddedProjects = () => {
         }
 
     };
-
+    const handleCancelClick = () => {
+        openModal("cancel", {
+            onConfirm: () => {
+                console.log("✅ Отменено");
+                closeModal();
+                navigate(`/projects`);
+            },
+            closeModal,
+        });
+    };
 
 
 
@@ -530,11 +543,11 @@ const AddedProjects = () => {
 
                                 {/* Контент нового проекта */}
                                 <div
-                                    className="h-auto justify-items-start items-start bg-white  m-4 p-4  mt-8 gap-2 rounded-xl ">
+                                    className= " h-auto justify-items-start items-start bg-white  m-4 p-4  mt-8 gap-2 rounded-xl ">
                                     <div className="flex justify-between items-start mb-4">
 
                                         <form
-                                            className="w-full p-3 m-2 rounded-2xl space-y-8">
+                                            className="flex flex-col h-full p-3 m-2 rounded-2xl space-y-8">
                                             <div className=" flex justify-start w-full gap-4 p-2  ">
                                                 <button onClick={() => navigate("/projects")}>
                                                     <img src={arrowLeft} alt="arrow"
@@ -543,6 +556,7 @@ const AddedProjects = () => {
                                                 <h1 className="text-2xl font-bold font-Roboto ">{activeSection}</h1>
                                             </div>
                                             {/* Переключатель  */}
+
                                             {<SwitcherSection sections={sections} onActive={setActiveSection}/>}
 
 
@@ -602,45 +616,44 @@ const AddedProjects = () => {
                                             }
 
 
-                                            <div className="flex  justify-end  space-x-2 pt-4 m-2">
-                                                <button
-                                                    type="button"
-                                                    className="w-[134px] h-[38px]  bg-gray-200 px-4  rounded-2xl font-bold hover:bg-gray-400"
-                                                > Отмена
-                                                </button>
+                                            <div className="flex justify-between items-center  space-x-2 pt-4 m-2">
 
-                                                {activeSection === sections[1] && (
-                                                    <div className="flex justify-end  space-x-2  ">
-                                                        <button
-                                                            onClick={handleReturn}
-                                                            type="button"
-                                                            className="w-[134px] h-[38px] bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-purple-400 "
-                                                        > Назад
-                                                        </button>
+                                                {/*{activeSection === sections[0] &&*/}
+                                                {/*    (<div className="flex space-x-2  ">*/}
+                                                {/*     */}
+                                                {/*    </div>)*/}
+                                                {/*}*/}
 
-                                                        <button
-                                                            onClick={handleSkip}
-                                                            type="button"
-                                                            className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white"
-                                                        > Далее
-                                                        </button>
+
+                                                {(activeSection === sections[1] || activeSection === sections[2]) && (
+                                                    <div className="flex justify-start space-x-2  ">
+                                                        <div className=" ">
+                                                            <button
+                                                                onClick={handleReturn}
+                                                                type="button"
+                                                                className=" w-[134px] h-[38px] bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-purple-400 "
+                                                            > Назад
+                                                            </button>
+                                                        </div>
+
 
                                                     </div>
                                                 )
                                                 }
-                                                {activeSection ! === sections[2] && (
-                                                    <div>
-                                                        <button
-                                                            onClick={handleReturn}
-                                                            type="button"
-                                                            className="w-[134px] h-[38px] bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-purple-400 "
-                                                        > Назад
-                                                        </button>
 
-                                                    </div>
-                                                )
+                                                {/*{activeSection === sections[2] && (*/}
+                                                {/*    <div className="flex justify-start  space-x-2">*/}
+                                                {/*        <button*/}
+                                                {/*            onClick={handleReturn}*/}
+                                                {/*            type="button"*/}
+                                                {/*            className="w-[134px] h-[38px] bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-purple-400 "*/}
+                                                {/*        > Назад*/}
+                                                {/*        </button>*/}
+                                                {/*    </div>*/}
+                                                {/*)*/}
 
-                                                }
+                                                {/*}*/}
+
                                                 {activeSection === sections[sections.length - 1] && isFilledSection["Обложка и скриншоты"] ?
                                                     (<button
                                                         onClick={handleSubmit}
@@ -649,37 +662,28 @@ const AddedProjects = () => {
                                                         Добавить
                                                     </button>) : null
                                                 }
-
-                                                {activeSection === sections[0] &&
-                                                    (<div className="flex justify-end  space-x-2  ">
+                                                <div className=" flex gap-3 justify-end flex-1">
+                                                    {(activeSection === sections[0] || activeSection === sections[1]) && (
                                                         <button
                                                             onClick={handleSkip}
                                                             type="button"
                                                             className="w-[134px] h-[38px]  bg-purple-300 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400 text-white"
                                                         > Далее
                                                         </button>
-                                                    </div>)
-                                                }
+                                                    )
+                                                    }
+                                                    <button
+                                                        type="button"
+                                                        className="w-[134px] h-[38px]  bg-gray-200 px-4  rounded-2xl font-bold hover:bg-gray-400"
+                                                     onClick={handleCancelClick}
+                                                    > Отмена
+                                                    </button>
+                                                </div>
 
                                             </div>
-                                            { ModalComponent }
+                                            {ModalComponent}
 
 
-                                            <div className="flex justify-end  space-x-2 pt-4 ">
-                                                {/*<button*/}
-                                                {/*    onClick={handleReturn}*/}
-                                                {/*    type="button"*/}
-                                                {/*    className="w-[134px] h-[38px] bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-purple-400 "*/}
-                                                {/*>*/}
-                                                {/*    Назад*/}
-                                                {/*</button>*/}
-
-                                                {/*<button*/}
-                                                {/*    type="button"*/}
-                                                {/*    className="w-[134px] h-[38px]  bg-gray-200 px-4 py-2 rounded-2xl font-bold hover:bg-gray-400"*/}
-                                                {/*> Отмена*/}
-                                                {/*</button>*/}
-                                            </div>
                                         </form>
 
 

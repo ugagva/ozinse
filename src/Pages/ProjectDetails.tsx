@@ -251,7 +251,7 @@ const ProjectDetails = () => {
                         <div className="flex flex-row w-full ">
                             <div className="flex-1 w-[872px] bg-gray-50 rounded-2xl mt-10  ">
                                 <div className="flex relative gap-4   px-[48px] pt-[40px] ">
-                                    <button className="text-sm text-[#8F92A1] font-Roboto font-normal "
+                                    <button className="text-sm text-[#8F92A1] font-roboto font-normal "
                                             onClick={() => navigate("/projects")}>Проекты
                                     </button>
                                     <img src={arrow} alt="arrow"/>

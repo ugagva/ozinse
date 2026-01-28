@@ -81,7 +81,7 @@ const RoleForm: FC<RoleFormProps> = ({
         console.log("Creating role with:", form);
 
         if (form.id) {
-
+            // изменение роли
             result = await updateRole(form.id, form);
         } else {
             // создание новой роли

@@ -7,6 +7,7 @@ import ModalFactory, {
     UpdateModalProps,
     ModalRoleFormProps,
     ModalRoleEditProps,
+    ModalConfirmCancelProps,
 } from "../Modals/ModalFactory.tsx";
 
 
@@ -19,6 +20,7 @@ type ModalComponentPropsMap = {
     addOnMain: ModalAddProjectOnMainProps;
     roleForm: ModalRoleFormProps;
     editRole: ModalRoleEditProps;
+    cancel: ModalConfirmCancelProps;
 };
 
 type ModalType = keyof ModalComponentPropsMap;

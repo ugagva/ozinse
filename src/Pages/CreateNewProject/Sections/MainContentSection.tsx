@@ -65,7 +65,7 @@ const MainSection:
             newProject.title,
             newProject.typeId,
             newProject.releaseYear,
-            newProject.durationInMins,
+            newProject.durationInMints,
             newProject.keywords,
             newProject.description,
             newProject.director,
@@ -137,7 +137,7 @@ const MainSection:
                 type="number"
                 name="durationInMins"
                 placeholder="Хронометраж (мин)"
-                value={newProject.durationInMins ?? ''}
+                value={newProject.durationInMints ?? ''}
                 onChange={handleChange}
                 className={inputBaseStyle}
             />

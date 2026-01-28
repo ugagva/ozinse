@@ -23,7 +23,7 @@ export interface NewProject {
         projectID?: number;
     };
     releaseYear: number|null;
-    durationInMins: number|null;
+    durationInMints: number|null;
     keywords: string;
     description: string;
     director: string;

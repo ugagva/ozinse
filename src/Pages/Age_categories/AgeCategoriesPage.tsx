@@ -11,33 +11,39 @@ import api from "../../featechers/api/api.tsx";
 import Lists from "../Lists.tsx";
 import AgeCategoryForm from "./AgeCategoryForm.tsx";
 
+import {useSearch} from "../../components/context/SearchContext.tsx";
+
 
 
 export type AgeCategoriesData = {
     ID: number;
     Title: string;
 };
+export type AgeCategoryFormData = {
+    ID?: number;
+    Title: string;
+}
+
+
 
 const AgeCategoriesPage = () => {
 
     const {closeModal, openModal, ModalComponent} = useModalManager();
-
     const [isAdding, setIsAdding] = useState(false);
-    const [categoriesToEdit, setCategoriesToEdit] = useState<AgeCategoriesData | null>(null);
+    const [ageCategories, setAgeCategories] = useState<AgeCategoriesData []>([]);
+    const [ageCategoryToEdit, setAgeCategoryToEdit] = useState<AgeCategoryFormData | null>(null);
     // const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const [ageCategories, setAgeCategories] = useState<Array<AgeCategoriesData>>([]);
+    const {search} = useSearch()
 
 
 
     // Загружаем список категорий на страницу
-
     const fetchAgeCategories = async () => {
         try {
             const response = await api.get(`v1/age-categories`);
             setAgeCategories(response.data as AgeCategoriesData[]);
-
             console.log(response.data)
         } catch (error) {
             console.log("Ошибка загрузки :", error)
@@ -45,12 +51,6 @@ const AgeCategoriesPage = () => {
             setLoading(false)
         }
     }
-    useEffect(() => {
-        fetchAgeCategories().then()
-    }, []);
-
-
-
 
 
     useEffect(() => {
@@ -60,48 +60,55 @@ const AgeCategoriesPage = () => {
 
 
 
-    const createAgeCategory = async (newCategory:AgeCategoriesData) => {
+    // const createAgeCategory = async (newCategory:AgeCategoryFormData) => {
+    //     try {
+    //         const response = await api.post("v1/age-categories", newCategory,
+    //         {
+    //             headers: {"Content-Type": "application/json"}
+    //         })
+    //         await fetchAgeCategories();
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error("Ошибка добавления новой категории ", error);
+    //     }
+    // }
+
+    const saveAgeCategory = async (data:AgeCategoryFormData) => {
         try {
-            const response = await api.post("v1/age-categories", newCategory,
-            {
-                headers: {"Content-Type": "application/json"}
-            })
-            await fetchAgeCategories();
+            const {ID, Title} = data;
+            const payload={title: Title}
+            const response =ID
+                ? await api.put(`v1/age-categories/${ID}`, payload, {  //  если есть ID, то редактируем
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                : await api.post(`v1/age-categories`, payload, {  //если нет ID, создаем новый
+                    headers: {"Content-Type": "application/json"}
+                });
+
+            await  fetchAgeCategories()
             return response.data;
-        } catch (error) {
-            console.error("Ошибка добавления новой категории ", error);
+        }catch (error) {
+            console.log("",error)
         }
     }
+
+
+
     // Добавляем категорию
     const handleAdd = async () => {
-        // Очистить режим редактирования
-        setCategoriesToEdit(null);
-        // Включить режим добавления
-        setIsAdding(true);
+        setAgeCategoryToEdit(null);// Очистить режим редактирования
+        setIsAdding(true);// Включить режим добавления
     }
 
     useEffect(() => {
-        if (categoriesToEdit) {
+        if (ageCategoryToEdit) {
             setIsAdding(true); // используем ту же форму
         }
-    }, [categoriesToEdit]);
+    }, [ageCategoryToEdit]);
 
 
-
-    // const getCategories = useCallback( async () :Promise<CategoriesData> => {
- //    setLoading(true);
- //    setError(null);
- //     const res = await fetch(`${BASE_URL}v1/age-categories`,{
- //         method: "GET",
- //         headers: {
- //             Authorization: `Bearer ${token}`
- //         }
- //     });
- //     if (!res.ok) throw new Error("Ошибка при получении ролей");
- //     const data: CategoriesData[] = await res.json();
- //     setCategories(data)
- //
- // },[token])
 
 
     const deleteCategory = async (id: number) => {
@@ -112,19 +119,18 @@ const AgeCategoriesPage = () => {
           console.log("Ошибка удаления :",err)}
     };
 
-
-
-
-
-
-
 const  handleEdit =(category:AgeCategoriesData)=> {
-    setCategoriesToEdit({ID: category.ID,
+    setAgeCategoryToEdit({
+        ID: category.ID,
         Title: category.Title,
     });// ;
 
     setIsAdding(false);
 }
+
+
+
+
 
     if (loading) return <div>Загрузка списка возрастных категорий...</div>;
 
@@ -138,6 +144,7 @@ const  handleEdit =(category:AgeCategoriesData)=> {
                     <div className="relative w-[1190px] h-[2864px] bg-gray-50 rounded-xl mr-[250px] mt-[32px] ">
                         <BodyHeader
                             value={'Возрасты'}
+                            count={ageCategories.length}
                             onClick={handleAdd}
 
                         />
@@ -148,11 +155,9 @@ const  handleEdit =(category:AgeCategoriesData)=> {
                                 <AgeCategoryForm
                                     key="new"
                                     initialData={ {Title:""}}
-                                    onSubmit={createAgeCategory}
+                                    onSubmit={saveAgeCategory}
                                     onClose={() => setIsAdding(false)}
-                                    // image={image}
-                                    // setImage={setImage}
-                                />
+                                   />
                                 <button
                                     onClick={() => setIsAdding(false)}
                                     className="mt-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
@@ -162,32 +167,36 @@ const  handleEdit =(category:AgeCategoriesData)=> {
                             </div>
                         )}
 
-                        {/*{categoriesToEdit && (*/}
-                        {/*    <GenreForm */}
-                        {/*        key={}*/}
-                        {/*        id={genreToEdit.ID}*/}
-                        {/*        initialData={{Title:genreToEdit.Title}}*/}
-                        {/*        onSubmit={createGenre}*/}
-                        {/*        onClose={() => setGenreToEdit(null)}*/}
-                        {/*        image={image}*/}
-                        {/*        setImage={setImage}*/}
-                        {/*    />*/}
-                        {/*)}*/}
-
+                        { ageCategoryToEdit && (
+                            <AgeCategoryForm
+                                key={ageCategoryToEdit.ID}
+                                id={ageCategoryToEdit.ID}
+                                initialData={{Title: ageCategoryToEdit.Title}}
+                                onSubmit={saveAgeCategory}
+                                onClose={() => setAgeCategoryToEdit(null)}
+                            />
+                        )}
                         <ul>
-                            {ageCategories.map((ageCategory ) => (
+                            {ageCategories.filter((ageCategory: AgeCategoriesData)=>{
+                                return ageCategory.Title
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase());
+                            }
+                            )
+                                .map((ageCategory: AgeCategoriesData ) => (
 
                                 <Lists
                                     key={ageCategory.ID}
-                                    type=" ageCategory"
+                                    type="ageCategory"
                                     data={ageCategory}
                                     handleEdit={()=>handleEdit(ageCategory)}
                                     onDelete={()=>{
                                         openModal("delete", {
-                                            label: `жанр "${ageCategory.Title}"`,
+                                            label: `"${ageCategory.Title}"`,
                                             onConfirm: async () => {
                                                 await deleteCategory(ageCategory.ID);
-                                                setAgeCategories(((prev) => prev.filter((ageCategory) => ageCategory.ID !== ageCategory.ID)))// здесь удаляем выбранный жанр
+                                                // Удаляем выбранный элемент по ID
+                                                setAgeCategories(((prev) => prev.filter((item) => item.ID !== ageCategory.ID)))
                                                 closeModal()
                                             },
                                             closeModal,

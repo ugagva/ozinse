@@ -25,7 +25,7 @@ const ModalUpdate = ({label, onConfirm, closeModal, content}: UpdateModalProps) 
                 <div className="flex items-center justify-between border-b border-[#8F92A1] border-dotted">
 
 
-                    <h2 className="text-lg  font-bold  mt-[10px] ml-[24px]"> Добавить проект {label}? </h2>
+                    <h2 className="text-lg  font-bold  mt-[10px] ml-[24px]"> Добавить изменения в {label}? </h2>
 
                     <button className="my-[22px] mr-[24px]" onClick={closeModal}>
                         <CrossSvgIcon/>
@@ -38,7 +38,7 @@ const ModalUpdate = ({label, onConfirm, closeModal, content}: UpdateModalProps) 
                 <div className=" flex items-center justify-center  mt-[20px]">
 
                     <p className=" text-base  text-[#8F92A1]">
-                        Вы действительно хотите изменить проект ?</p>
+                        Вы действительно хотите изменить {label} ?</p>
                 </div>
                 <div className="flex items-center justify-center mt-[42px] gap-3 ">
                     <button

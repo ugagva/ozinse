@@ -4,7 +4,7 @@ import CrossSvgIcon from "../../Icons/CrossIcon.tsx";
 import React, {useEffect, useRef, useState} from "react";
 
 import BaseButton from "../../components/elements/BaseButton.tsx";
-import {GenreFormData,} from "./GenresPage.tsx";
+import {GenreFormData, } from "./GenresPage.tsx";
 import {Upload} from "lucide-react";
 import TrashSvgIcon from "../../Icons/TrashSvgIcon.tsx";
 
@@ -15,24 +15,20 @@ interface GenreFormProps {
     id?: number,
     initialData?: { Title: string },
     onClose?: () => void,
-    onSubmit?: (newGenre: GenreFormData) => Promise<void>
+    onSubmit?: (newGenre: GenreFormData,) => Promise<void>
+    onUpdate?: (genre: number | undefined) => Promise<void>
     setImage:  (s: string | null) => void,
     image?: string | null,
 
 }
 
 
-const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => {
+const GenreForm = ({id, onClose, onSubmit, image, setImage,initialData, onUpdate}: GenreFormProps) => {
     const [genre, setGenre] = useState<GenreFormData>({Title:""})
 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (id) {
-            loadGenreData(id).then()
-        }
 
-    }, [id]);
 
 
     const loadGenreData = async (id: number) => {
@@ -47,6 +43,14 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (id && initialData) {
+            loadGenreData(id).then()
+        }
+
+    }, [id, initialData]);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -97,6 +101,9 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
                 Загружаем жанр для редактирования...
             </div>
         );
+
+
+
 
 
 
@@ -183,12 +190,24 @@ const GenreForm = ({id, onClose, onSubmit, image, setImage}: GenreFormProps) => 
 
 
                     <div className="flex items-center justify-center m-2 p-4 gap-1">
+                        {genre.ID? (
                         <BaseButton
                             className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "
                             title="Добавить"
                             onClick={() => onSubmit?.(genre)}
                         >
                         </BaseButton>
+                            )
+                        :(
+                                <BaseButton
+                                    className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "
+                                    title="Сохранить"
+                                    onClick={() =>onUpdate?.(genre.ID) }
+                                >
+                                </BaseButton>
+                            )
+
+                        }
 
                         <button
                             type="button"

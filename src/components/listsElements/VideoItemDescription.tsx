@@ -17,8 +17,6 @@ const VideoItemDescription = () => {
                 <p></p>
 
                 <EditSvgIcon></EditSvgIcon>
-
-
             </div>
 
             <button className="flex flex-row m-4 gap-4 p-1 ">

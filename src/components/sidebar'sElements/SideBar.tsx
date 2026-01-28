@@ -9,7 +9,7 @@ const SideBar = () => {
         <div>
             <aside
                 id="sidebar"
-                className="w-[250px] h-[1024px] text-[#b2b2b2]  flex flex-col  items-start  mt-[20px]  lg:sticky "
+                className=" flex flex-col  items-start w-[250px] h-[1024px] text-[#b2b2b2]   mt-[20px]  lg:sticky "
             >
                 <Logo/>
                 <Nav/>

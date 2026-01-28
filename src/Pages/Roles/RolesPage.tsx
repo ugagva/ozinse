@@ -13,6 +13,7 @@ import TrashSvgIcon from "../../Icons/TrashSvgIcon.tsx";
 
 import EditSvgIcon from "../../Icons/EditSvgIcon.tsx";
 import CheckSvgIcon from "../../Icons/CheckSvgIcon.tsx";
+import {useSearch} from "../../components/context/SearchContext.tsx";
 
 // import {RoleFormContext} from "../CreateNewProject/Sections/RoleFormContext.tsx";
 
@@ -65,7 +66,7 @@ const RolesPage = ({token}: { token: string }) => {
     // const navigate = useNavigate();
 
 
-
+    const {search}=useSearch()
 
 
     // Загружаем список ролей
@@ -87,7 +88,6 @@ const RolesPage = ({token}: { token: string }) => {
         setRoleToEdit(null);
         // Включить режим добавления
         setIsAdding(true);
-
     }
 
 
@@ -187,6 +187,7 @@ const RolesPage = ({token}: { token: string }) => {
 
                         <BodyHeader
                             value={'Роли'}
+                            count={roles.length}
                             onClick={handleAdd}
 
                         />
@@ -220,7 +221,13 @@ const RolesPage = ({token}: { token: string }) => {
                         )}
 
                         <ul>
-                            {roles.map((role, i) => (
+                            {roles.filter(role=>
+                                search.trim() === "" ||
+                                role.title.some(t =>
+                                    t.toLowerCase().includes(search.toLowerCase())
+                                )
+                            )
+                                .map((role, i) => (
                                 <li key={i}
                                     className="relative w-[538px] h-[180px]  left-10 bg-white rounded-xl  transition-all p-2 mr-[48px] m-2">
                                     <p className="text-xl font-bold ">
@@ -236,7 +243,7 @@ const RolesPage = ({token}: { token: string }) => {
                                         <li className="flex items-center gap-2">
                                             <CheckSvgIcon/>
                                             <span>Категории </span>
-                                            <div className="text-[#9CA3AF]">{role. ageCategories}</div>
+                                            <div className="text-[#9CA3AF]">{role.ageCategories}</div>
 
                                         </li>
 
@@ -258,13 +265,13 @@ const RolesPage = ({token}: { token: string }) => {
                                     <div className=" flex gap-1 absolute bottom-2 right-2">
                                         <button
                                             onClick={() => handleEdit(role,)}
-                                            className=" text-white px-2 py-1 rounded hover:bg-blue-600"
+                                            className=" text-black px-2 py-1 rounded hover:text-blue-600"
                                         >
                                             <EditSvgIcon/>
                                         </button>
                                         <button
                                             onClick={() => handleDelete(role,)}
-                                            className=" text-black px-2 py-1 rounded hover:bg-red-600"
+                                            className=" text-black px-2 py-1 rounded hover:text-red-600"
                                         >
                                             <TrashSvgIcon/>
                                         </button>

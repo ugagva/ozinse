@@ -8,6 +8,7 @@ import Lists from "../Lists.tsx";
 import {useModalManager} from "../../components/Modals/useModalManager.tsx";
 
 import UserForm from "./UserForm.tsx";
+import {useSearch} from "../../components/context/SearchContext.tsx";
 
 
 export type UsersData= {
@@ -16,14 +17,16 @@ export type UsersData= {
     Email: string;
     CreatedAt:string;
     UpdatedAt:string;
+    Phone: string;
+    DateOfBirth:string;
 }
 
 export type UserFormData = {
-    ID?: number;
-    Name: string;
-    Email?: string;
-    CreatedAt?: string;
-    UpdatedAt?: string;
+    id?: number;
+    name: string;
+    email?: string;
+    phone: string;
+    date_of_birth:string;
 };
 
 
@@ -34,8 +37,14 @@ const UsersPage = () => {
     const [isAdding, setIsAdding] = useState(false);
     const {openModal, closeModal, ModalComponent} = useModalManager();
     const [userToEdit, setUserToEdit] = useState<UserFormData | null>(null);
+   const {search}=useSearch()
 
-
+    // При поиске по нескольким полям объекта
+    const searchInObject = (obj: object, search: string) =>
+        Object.values(obj)
+            .join(" ")
+            .toLowerCase()
+            .includes(search.toLowerCase());
 
     const fetchUsers = async () => {
         try {
@@ -77,7 +86,7 @@ const createUsers=async (newUsers:UserFormData) => {
 
 
 const handleEdit = async (user:UsersData) => {
-        setUserToEdit({ID: user.ID, Name: user.Name, Email:user.Email, CreatedAt:user.CreatedAt, UpdatedAt:user.UpdatedAt});
+        setUserToEdit({id: user.ID, name: user.Name, email:user.Email, phone:user.Phone,date_of_birth:user.DateOfBirth});
         setIsAdding(false);
 }
 
@@ -100,12 +109,13 @@ if (loading) return <div>Загрузка списка пользователе�
 
                         <BodyHeader
                             value={'Пользователи'}
+                            count={users.length}
                             onClick={handleAdd}
                         />
                         {isAdding &&(
                             <UserForm
                                 key="new"
-                                initialData={ { Name: "", Email:"",}}
+                                initialData={ { name: "", email:"", phone:"", date_of_birth:"",  }}
                                 onSubmit={createUsers}
                                 onClose={() => setIsAdding(false)}
                             />
@@ -113,9 +123,9 @@ if (loading) return <div>Загрузка списка пользователе�
                         }
                         {userToEdit &&(
                             <UserForm
-                                key={userToEdit.ID}
-                                id={userToEdit.ID}
-                                initialData={{Name:userToEdit.Name}}
+                                key={userToEdit.id}
+                                id={userToEdit.id}
+                                initialData={{name:userToEdit.name, phone:userToEdit.phone, date_of_birth:userToEdit.date_of_birth}}
                                 onSubmit={createUsers}
                                 onClose={()=>setUserToEdit(null)}
                             />
@@ -123,13 +133,16 @@ if (loading) return <div>Загрузка списка пользователе�
                         )}
 
                         <ul>
-                            {users.map((user) => (
-                                <Lists key={user.ID}
-                                       type="user"
-                                       data={user}
-                                       handleEdit={handleEdit}
-                                       onDelete={() => {
-                                           openModal("delete", {
+
+                            {users
+                                .filter(user => searchInObject(user, search))   //  Фильтр  по поиску
+                                .map(user=>(
+                                    <Lists key={user.ID}
+                                           type="user"
+                                           data={user}
+                                           handleEdit={handleEdit}
+                                           onDelete={() => {
+                                               openModal("delete", {
                                                    label: `жанр "${user.Name}"`,
                                                    onConfirm: async () => {
                                                        await handleDelete(user.ID);
@@ -137,13 +150,13 @@ if (loading) return <div>Загрузка списка пользователе�
                                                        closeModal()
                                                    },
                                                    closeModal,
-                                               }
-                                           )
-                                       }}
-                                />
-                            ))
-
+                                               })
+                                           }}
+                                    />
+                                ))
                             }
+
+
 
                         </ul>
                         {ModalComponent}

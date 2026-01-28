@@ -17,11 +17,17 @@ interface UserFormProps {
 const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
 
     const [user, setUser] = useState<UserFormData>(
-        initialData ?? { Name:"", Email:""}
+        initialData ?? { name:"", email:"", date_of_birth:"", phone:"",  },
     );
     const [loading, setLoading] = useState(false);
 
 
+    useEffect(() => {
+
+        if (id){
+            loadUserData(id).then();
+        }
+    }, [id]);
 
 
     const loadUserData = async (id: number) => {
@@ -30,6 +36,7 @@ const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
             const response = await api.get(`v1/users/${id}`);
 
             setUser(response.data); // <-- заполняем форму
+            console.log("Api date",response.data);
         } catch (error) {
             console.error("Ошибка при загрузке пользователя", error);
         } finally {
@@ -37,13 +44,8 @@ const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
         }
     };
 
-    useEffect(() => {
-        if (initialData) setUser(initialData);
 
-       else if (id) {
-            loadUserData(id).then()
-        }
-    }, [id, initialData]);
+
 
 
 
@@ -72,7 +74,7 @@ const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
             <div className="flex  flex-col  bg-white rounded-xl p-1 w-[574px] h-[433px]">
                 <div className="flex  items-center justify-between">
                     <h2 className=" text-xl  font-bold  mt-[10px] ml-[24px] ">
-                        {user.Name? "Редактировать пользователя": "Создать нового пользователя"   }
+                        {user.name ? "Редактировать пользователя" : "Создать нового пользователя"}
 
                     </h2>
 
@@ -88,20 +90,45 @@ const UserForm = ({ id, onClose, initialData, onSubmit,}: UserFormProps) => {
                 <div className=" text-[#8F92A1]-800  text-[14px] font-bold">
                     {user && (
                         <input
-
                             placeholder="Имя пользователя "
-                            name="Name"
-                            value={user.Name}
+                            name="name"
+                            value={user.name}
                             onChange={handleChange}
-                            className="flex  justify-center w-[510px] h-[46px] bg-[#8F92A10D]  m-6 p-5    border-gray-50 rounded-2xl shadow-l  "
+                            className="flex  justify-center w-[510px] h-[40px] bg-[#8F92A10D] m-1 p-5    border-gray-50 rounded-2xl shadow-l  "
                         />
+
                     )}
+                    <input
+                        placeholder="Email "
+                        name="email"
+                        type="email"
+                        value={user.email}
+                        onChange={handleChange}
+                        className="flex  justify-center w-[510px] h-[40px] bg-[#8F92A10D]  m-1 p-5    border-gray-50 rounded-2xl shadow-l  "
+                    />
                 </div>
+
+
+                <input
+                    placeholder="Phone "
+                    name="phone"
+                    value={user.phone}
+                    onChange={handleChange}
+                    className="flex  justify-center w-[510px] h-[40px] bg-[#8F92A10D]  m-1 p-5  border-gray-50 rounded-2xl shadow-l  "
+                />
+                <input
+                    placeholder="DateOfBirth "
+                    name="date_of_birth"
+                    value={user.date_of_birth}
+                    onChange={handleChange}
+                    className="flex  justify-center w-[510px] h-[46px] bg-[#8F92A10D]  m-1 p-5  border-gray-50 rounded-2xl shadow-l  "
+                />
+
 
                 <div className="flex items-center justify-center m-2 p-4 gap-1">
                     <BaseButton
                         className="flex justify-center items-center bg-[#7E2DFC] w-[134px] h-[38px] opasity-2 rounded-[16px] hover:bg-blue-800    text-center text-white font-bold text-sm  "
-                        title={user.ID ? "Сохранить" : "Добавить"}
+                        title={user.name ? "Сохранить" : "Добавить"}
                         onClick={() => onSubmit?.(user)}
                     >
                     </BaseButton>
